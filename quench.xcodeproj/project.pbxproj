@@ -46,6 +46,7 @@
 		A346722F2BD567F900E52DEC /* quenchUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = quenchUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A34672332BD567F900E52DEC /* quenchUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = quenchUITests.swift; sourceTree = "<group>"; };
 		A34672352BD567F900E52DEC /* quenchUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = quenchUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		A35BC8182BD575900018D62F /* Readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +77,7 @@
 		A346720A2BD567F700E52DEC = {
 			isa = PBXGroup;
 			children = (
+				A35BC8182BD575900018D62F /* Readme.md */,
 				A34672152BD567F700E52DEC /* quench */,
 				A34672282BD567F900E52DEC /* quenchTests */,
 				A34672322BD567F900E52DEC /* quenchUITests */,
