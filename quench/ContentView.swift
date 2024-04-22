@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 
+
 struct ContentView: View {
         
     var body: some View {
@@ -17,6 +18,7 @@ struct ContentView: View {
             VStack {
                 Text("Quench")
                     .font(.system(size:70, weight: .medium))
+                    .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
                 Spacer()
                 HStack {
                     Button("Regsiter") {
@@ -26,7 +28,7 @@ struct ContentView: View {
                         
                     }
                 }
-                .buttonStyle(.bordered)
+                .buttonStyle(AllButtonStyle())
             }
         }
         
@@ -38,4 +40,16 @@ struct ContentView: View {
 #Preview {
     ContentView()
         .modelContainer(for: Item.self, inMemory: true)
+}
+
+struct AllButtonStyle: ButtonStyle {
+
+  func makeBody(configuration: Self.Configuration) -> some View {
+    configuration.label
+      .padding()
+      .foregroundColor(.black)
+      .background(configuration.isPressed ? Color.red : Color.blue)
+      .cornerRadius(20.0)
+  }
+
 }
