@@ -10,25 +10,47 @@ import SwiftData
 
 
 struct ContentView: View {
+    @State var email: String = ""
         
     var body: some View {
         ZStack{
             Color.purple
                 .ignoresSafeArea()
-            VStack {
-                Text("Quench")
-                    .font(.system(size:70, weight: .medium))
-                    .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+            VStack (spacing: 90){
+                VStack {
+                    Text("Quench")
+                        .font(.system(size:70, weight: .medium))
+                        .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                    Text("One day at a time")
+                }
                 Spacer()
-                HStack {
-                    Button("Regsiter") {
+                VStack {
+                    TextField("Enter your username or email", text:$email)
+                        .multilineTextAlignment(.center)
+                        .frame(maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                        .textFieldStyle(.roundedBorder)
+                        .padding()
+                    
+                    TextField("Password", text:$email)
+                        .multilineTextAlignment(.center)
+                        .frame(maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                        .textFieldStyle(.roundedBorder)
+                        .padding()
+                        
+                        
+                    Button("Sign In") {
                         
                     }
-                    Button("Sign In") {
+                    .buttonStyle(AllButtonStyle())
+                }
+                Spacer()
+                HStack {
+                    Button("Register") {
                         
                     }
                 }
                 .buttonStyle(AllButtonStyle())
+                Spacer()
             }
         }
         
