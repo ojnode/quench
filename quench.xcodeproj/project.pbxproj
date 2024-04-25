@@ -15,6 +15,7 @@
 		A346722A2BD567F900E52DEC /* quenchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34672292BD567F900E52DEC /* quenchTests.swift */; };
 		A34672342BD567F900E52DEC /* quenchUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34672332BD567F900E52DEC /* quenchUITests.swift */; };
 		A34672362BD567F900E52DEC /* quenchUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34672352BD567F900E52DEC /* quenchUITestsLaunchTests.swift */; };
+		A36488C22BDAD06400A267B9 /* Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = A36488C12BDAD06400A267B9 /* Register.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		A34672332BD567F900E52DEC /* quenchUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = quenchUITests.swift; sourceTree = "<group>"; };
 		A34672352BD567F900E52DEC /* quenchUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = quenchUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		A35BC8182BD575900018D62F /* Readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
+		A36488C12BDAD06400A267B9 /* Register.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Register.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 				A346721A2BD567F700E52DEC /* Item.swift */,
 				A346721C2BD567F900E52DEC /* Assets.xcassets */,
 				A346721E2BD567F900E52DEC /* Preview Content */,
+				A36488C12BDAD06400A267B9 /* Register.swift */,
 			);
 			path = quench;
 			sourceTree = "<group>";
@@ -264,6 +267,7 @@
 			files = (
 				A34672192BD567F700E52DEC /* ContentView.swift in Sources */,
 				A346721B2BD567F700E52DEC /* Item.swift in Sources */,
+				A36488C22BDAD06400A267B9 /* Register.swift in Sources */,
 				A34672172BD567F700E52DEC /* quenchApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
