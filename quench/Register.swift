@@ -12,18 +12,20 @@ struct RegisterView: View {
     @State var firstName: String = ""
     @State var lastName: String = ""
     @State var userName: String = ""
+    @State var password: String = ""
+    @State var newUser: User? = nil
     
     var body: some View {
         ZStack {
             Color.black
                 .ignoresSafeArea()
 
-            VStack (spacing: 35) {
+            VStack (spacing: 100) {
                 
                 Text("Quench")
                     .font(.system(size:20, weight: .light))
                     .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                VStack (spacing:50) {
+                VStack (spacing:65) {
                     HStack {
                         Text("First Name")
                             .font(.system(size:20, weight: .medium))
@@ -31,7 +33,7 @@ struct RegisterView: View {
                         TextField("Enter your first name", text:$firstName)
                             .multilineTextAlignment(.center)
                             .textFieldStyle(.roundedBorder)
-                            .padding()
+                            
                     }
                     
                     HStack {
@@ -58,14 +60,24 @@ struct RegisterView: View {
                         Text("Password")
                             .font(.system(size:20, weight: .medium))
                             .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                        TextField("Enter your password", text:$userName)
+                        TextField("Enter your password", text:$password)
                             .multilineTextAlignment(.center)
                             .textFieldStyle(.roundedBorder)
                             .padding()
                     }
+                    
                 }
             
                 Spacer()
+                Button(action: {
+                    newUser = User(firstName: firstName, lastName: lastName, userName: userName)
+                    newUser?.store()
+                }) {
+                    Text("Register")
+                }
+                
+                
+                
             }
  
         }
@@ -73,6 +85,7 @@ struct RegisterView: View {
     }
     
 }
+
 
 #Preview {
     RegisterView()
