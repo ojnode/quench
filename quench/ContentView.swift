@@ -8,7 +8,7 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @State var email: String = ""
+    @State var signInModel = SignInViewModel()
         
     var body: some View {
         ZStack{
@@ -27,18 +27,18 @@ struct ContentView: View {
                 Spacer()
                 
                 VStack {
-                    TextField("Enter your username or email", text:$email)
+                    TextField("Enter your username or email", text:$signInModel.email)
                         .multilineTextAlignment(.center)
                         .frame(maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
                         .textFieldStyle(.roundedBorder)
                         .padding()
-                    TextField("Password", text:$email)
+                    SecureField("Password", text:$signInModel.password)
                         .multilineTextAlignment(.center)
                         .frame(maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
                         .textFieldStyle(.roundedBorder)
                         .padding()
                     Button("Sign In") {
-                        
+                        signInModel.signInWithEmail()
                     }
                     .buttonStyle(AllButtonStyle())
                 }
@@ -73,3 +73,19 @@ struct AllButtonStyle: ButtonStyle {
   }
 
 }
+
+class SignInViewModel {
+    var email = ""
+    var password = ""
+    
+    func signInWithEmail() {
+        Task {
+            do {
+               try await AuthService.shared.registerEmail(email: email, password: password)
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
+}
+
