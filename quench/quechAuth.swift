@@ -17,7 +17,11 @@ struct quenchAuthApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if (AuthService.shared.currentUser != nil) {
+                HomeView()
+            } else {
+                ContentView()
+            }
         }
     }
 }

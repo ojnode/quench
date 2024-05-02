@@ -7,21 +7,31 @@
 
 import FirebaseAuth
 
+
+@Observable
 final class AuthService {
     
+    var currentUser: FirebaseAuth.User?
     private let auth = Auth.auth()
     
     static let shared = AuthService()
     
-    private init() { }
+    private init() { 
+        currentUser = auth.currentUser
+    }
     
     func registerEmail(email: String, password: String) async throws {
         let result = try await auth.createUser(withEmail: email, password: password)
-        print(result)
+        currentUser = result.user
     }
     
     func signInEmail(email: String, password: String) async throws {
         let result = try await auth.signIn(withEmail: email, password: password)
-        print(result.user)
+        currentUser = result.user
+    }
+    
+    func signOut() throws {
+        try auth.signOut()
+        currentUser = nil
     }
 }
