@@ -10,21 +10,18 @@ import SwiftUI
 struct HomeView: View {
     
     var body: some View {
-        VStack {
-            Text("Hello World!")
-            
-            Button(role: .destructive) {
-                do {
-                    try AuthService.shared.signOut()
-                } catch {
-                    print(error.localizedDescription)
-                }
+        ZStack {
+            VStack (spacing:40) {
+                Image(.homepage)
+                    .resizable()
+                Spacer()
+                Text("Start your journey")
                 
-            } label: {
-                Text("Sign Out")
+                Text("map")
+                
+                Text("socials")
             }
         }
-        
     }
 }
 
