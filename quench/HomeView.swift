@@ -11,15 +11,23 @@ struct HomeView: View {
     
     var body: some View {
         ZStack {
-            VStack (spacing:40) {
-                Image(.homepage)
-                    .resizable()
-                Spacer()
-                Text("Start your journey")
+            NavigationStack {
+                NavigationLink(destination: SetGoal()) {
+                    Image(.homepage)
+                        .resizable()
+                        .aspectRatio(2, contentMode: .fit)
+                        .cornerRadius(25)
+                        .padding()
+                }
                 
-                Text("map")
-                
-                Text("socials")
+                VStack (spacing:40) {
+                    
+                    Spacer()
+                    
+                    Text("map")
+                    
+                    Text("socials")
+                }
             }
         }
     }

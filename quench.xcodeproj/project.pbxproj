@@ -17,12 +17,9 @@
 		A34672362BD567F900E52DEC /* quenchUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34672352BD567F900E52DEC /* quenchUITestsLaunchTests.swift */; };
 		A36488C22BDAD06400A267B9 /* Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = A36488C12BDAD06400A267B9 /* Register.swift */; };
 		A39729D92BE973B8003E8859 /* setGoals.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39729D82BE973B8003E8859 /* setGoals.swift */; };
-		A39729DC2BE98599003E8859 /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = A39729DB2BE98599003E8859 /* GoogleMaps */; };
-		A39729DE2BE98599003E8859 /* GoogleMapsBase in Frameworks */ = {isa = PBXBuildFile; productRef = A39729DD2BE98599003E8859 /* GoogleMapsBase */; };
-		A39729E02BE98599003E8859 /* GoogleMapsCore in Frameworks */ = {isa = PBXBuildFile; productRef = A39729DF2BE98599003E8859 /* GoogleMapsCore */; };
-		A39729E22BE98599003E8859 /* GoogleMapsM4B in Frameworks */ = {isa = PBXBuildFile; productRef = A39729E12BE98599003E8859 /* GoogleMapsM4B */; };
 		A39A481C2BDEDDB300CEEEFA /* user.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39A481B2BDEDDB300CEEEFA /* user.swift */; };
 		A39E78162BE404BB00F3FF2C /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39E78152BE404BB00F3FF2C /* HomeView.swift */; };
+		A3AC6F302BE995DC0082F0CA /* GooglePlaces in Frameworks */ = {isa = PBXBuildFile; productRef = A3AC6F2F2BE995DC0082F0CA /* GooglePlaces */; };
 		A3C3F4012BE18B1D00EB5993 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A3C3F4002BE18B1D00EB5993 /* GoogleService-Info.plist */; };
 		A3C3F4042BE18C7400EB5993 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = A3C3F4032BE18C7400EB5993 /* FirebaseAnalytics */; };
 		A3C3F4062BE18C7400EB5993 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = A3C3F4052BE18C7400EB5993 /* FirebaseAnalyticsOnDeviceConversion */; };
@@ -73,15 +70,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A34672132BD567F700E52DEC /* quenchApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = quenchApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A34672132BD567F700E52DEC /* quench.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = quench.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A34672162BD567F700E52DEC /* quenchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = quenchApp.swift; sourceTree = "<group>"; };
 		A34672182BD567F700E52DEC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A346721A2BD567F700E52DEC /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		A346721C2BD567F900E52DEC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A346721F2BD567F900E52DEC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		A34672252BD567F900E52DEC /* quenchAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = quenchAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A34672252BD567F900E52DEC /* quenchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = quenchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A34672292BD567F900E52DEC /* quenchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = quenchTests.swift; sourceTree = "<group>"; };
-		A346722F2BD567F900E52DEC /* quenchAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = quenchAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A346722F2BD567F900E52DEC /* quenchUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = quenchUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A34672332BD567F900E52DEC /* quenchUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = quenchUITests.swift; sourceTree = "<group>"; };
 		A34672352BD567F900E52DEC /* quenchUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = quenchUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		A35BC8182BD575900018D62F /* Readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
@@ -108,11 +105,10 @@
 				A3C3F42C2BE18C7400EB5993 /* FirebaseMLModelDownloader in Frameworks */,
 				A3C3F4202BE18C7400EB5993 /* FirebaseFirestoreSwift in Frameworks */,
 				A3C3F40C2BE18C7400EB5993 /* FirebaseAppCheck in Frameworks */,
+				A3AC6F302BE995DC0082F0CA /* GooglePlaces in Frameworks */,
 				A3C3F40A2BE18C7400EB5993 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				A3C3F4102BE18C7400EB5993 /* FirebaseAuth in Frameworks */,
 				A3C3F4142BE18C7400EB5993 /* FirebaseCrashlytics in Frameworks */,
-				A39729E22BE98599003E8859 /* GoogleMapsM4B in Frameworks */,
-				A39729DC2BE98599003E8859 /* GoogleMaps in Frameworks */,
 				A3C3F4342BE18C7400EB5993 /* FirebaseRemoteConfigSwift in Frameworks */,
 				A3C3F4262BE18C7400EB5993 /* FirebaseInAppMessaging-Beta in Frameworks */,
 				A3C3F4182BE18C7400EB5993 /* FirebaseDatabaseSwift in Frameworks */,
@@ -125,10 +121,8 @@
 				A3C3F4282BE18C7400EB5993 /* FirebaseInAppMessagingSwift-Beta in Frameworks */,
 				A3C3F4362BE18C7400EB5993 /* FirebaseStorage in Frameworks */,
 				A3C3F41A2BE18C7400EB5993 /* FirebaseDynamicLinks in Frameworks */,
-				A39729E02BE98599003E8859 /* GoogleMapsCore in Frameworks */,
 				A3C3F41E2BE18C7400EB5993 /* FirebaseFirestoreCombine-Community in Frameworks */,
 				A3C3F42E2BE18C7400EB5993 /* FirebaseMessaging in Frameworks */,
-				A39729DE2BE98599003E8859 /* GoogleMapsBase in Frameworks */,
 				A3C3F42A2BE18C7400EB5993 /* FirebaseInstallations in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -164,9 +158,9 @@
 		A34672142BD567F700E52DEC /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A34672132BD567F700E52DEC /* quenchApp.app */,
-				A34672252BD567F900E52DEC /* quenchAppTests.xctest */,
-				A346722F2BD567F900E52DEC /* quenchAppUITests.xctest */,
+				A34672132BD567F700E52DEC /* quench.app */,
+				A34672252BD567F900E52DEC /* quenchTests.xctest */,
+				A346722F2BD567F900E52DEC /* quenchUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -226,9 +220,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		A34672122BD567F700E52DEC /* quenchApp */ = {
+		A34672122BD567F700E52DEC /* quench */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A34672392BD567F900E52DEC /* Build configuration list for PBXNativeTarget "quenchApp" */;
+			buildConfigurationList = A34672392BD567F900E52DEC /* Build configuration list for PBXNativeTarget "quench" */;
 			buildPhases = (
 				A346720F2BD567F700E52DEC /* Sources */,
 				A34672102BD567F700E52DEC /* Frameworks */,
@@ -238,7 +232,7 @@
 			);
 			dependencies = (
 			);
-			name = quenchApp;
+			name = quench;
 			packageProductDependencies = (
 				A3C3F4032BE18C7400EB5993 /* FirebaseAnalytics */,
 				A3C3F4052BE18C7400EB5993 /* FirebaseAnalyticsOnDeviceConversion */,
@@ -267,18 +261,15 @@
 				A3C3F4332BE18C7400EB5993 /* FirebaseRemoteConfigSwift */,
 				A3C3F4352BE18C7400EB5993 /* FirebaseStorage */,
 				A3C3F4372BE18C7400EB5993 /* FirebaseStorageCombine-Community */,
-				A39729DB2BE98599003E8859 /* GoogleMaps */,
-				A39729DD2BE98599003E8859 /* GoogleMapsBase */,
-				A39729DF2BE98599003E8859 /* GoogleMapsCore */,
-				A39729E12BE98599003E8859 /* GoogleMapsM4B */,
+				A3AC6F2F2BE995DC0082F0CA /* GooglePlaces */,
 			);
 			productName = quench;
-			productReference = A34672132BD567F700E52DEC /* quenchApp.app */;
+			productReference = A34672132BD567F700E52DEC /* quench.app */;
 			productType = "com.apple.product-type.application";
 		};
-		A34672242BD567F900E52DEC /* quenchAppTests */ = {
+		A34672242BD567F900E52DEC /* quenchTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A346723C2BD567F900E52DEC /* Build configuration list for PBXNativeTarget "quenchAppTests" */;
+			buildConfigurationList = A346723C2BD567F900E52DEC /* Build configuration list for PBXNativeTarget "quenchTests" */;
 			buildPhases = (
 				A34672212BD567F900E52DEC /* Sources */,
 				A34672222BD567F900E52DEC /* Frameworks */,
@@ -289,14 +280,14 @@
 			dependencies = (
 				A34672272BD567F900E52DEC /* PBXTargetDependency */,
 			);
-			name = quenchAppTests;
+			name = quenchTests;
 			productName = quenchTests;
-			productReference = A34672252BD567F900E52DEC /* quenchAppTests.xctest */;
+			productReference = A34672252BD567F900E52DEC /* quenchTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		A346722E2BD567F900E52DEC /* quenchAppUITests */ = {
+		A346722E2BD567F900E52DEC /* quenchUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A346723F2BD567F900E52DEC /* Build configuration list for PBXNativeTarget "quenchAppUITests" */;
+			buildConfigurationList = A346723F2BD567F900E52DEC /* Build configuration list for PBXNativeTarget "quenchUITests" */;
 			buildPhases = (
 				A346722B2BD567F900E52DEC /* Sources */,
 				A346722C2BD567F900E52DEC /* Frameworks */,
@@ -307,9 +298,9 @@
 			dependencies = (
 				A34672312BD567F900E52DEC /* PBXTargetDependency */,
 			);
-			name = quenchAppUITests;
+			name = quenchUITests;
 			productName = quenchUITests;
-			productReference = A346722F2BD567F900E52DEC /* quenchAppUITests.xctest */;
+			productReference = A346722F2BD567F900E52DEC /* quenchUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -335,7 +326,7 @@
 					};
 				};
 			};
-			buildConfigurationList = A346720E2BD567F700E52DEC /* Build configuration list for PBXProject "quenchApp" */;
+			buildConfigurationList = A346720E2BD567F700E52DEC /* Build configuration list for PBXProject "quench" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -346,15 +337,15 @@
 			mainGroup = A346720A2BD567F700E52DEC;
 			packageReferences = (
 				A3C3F4022BE18C7400EB5993 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				A39729DA2BE98599003E8859 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
+				A3AC6F2E2BE995DC0082F0CA /* XCRemoteSwiftPackageReference "ios-places-sdk" */,
 			);
 			productRefGroup = A34672142BD567F700E52DEC /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A34672122BD567F700E52DEC /* quenchApp */,
-				A34672242BD567F900E52DEC /* quenchAppTests */,
-				A346722E2BD567F900E52DEC /* quenchAppUITests */,
+				A34672122BD567F700E52DEC /* quench */,
+				A34672242BD567F900E52DEC /* quenchTests */,
+				A346722E2BD567F900E52DEC /* quenchUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -425,12 +416,12 @@
 /* Begin PBXTargetDependency section */
 		A34672272BD567F900E52DEC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A34672122BD567F700E52DEC /* quenchApp */;
+			target = A34672122BD567F700E52DEC /* quench */;
 			targetProxy = A34672262BD567F900E52DEC /* PBXContainerItemProxy */;
 		};
 		A34672312BD567F900E52DEC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A34672122BD567F700E52DEC /* quenchApp */;
+			target = A34672122BD567F700E52DEC /* quench */;
 			targetProxy = A34672302BD567F900E52DEC /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -626,7 +617,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/quenchApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/quenchApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/quench.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/quench";
 			};
 			name = Debug;
 		};
@@ -645,7 +636,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/quenchApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/quenchApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/quench.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/quench";
 			};
 			name = Release;
 		};
@@ -686,7 +677,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A346720E2BD567F700E52DEC /* Build configuration list for PBXProject "quenchApp" */ = {
+		A346720E2BD567F700E52DEC /* Build configuration list for PBXProject "quench" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A34672372BD567F900E52DEC /* Debug */,
@@ -695,7 +686,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A34672392BD567F900E52DEC /* Build configuration list for PBXNativeTarget "quenchApp" */ = {
+		A34672392BD567F900E52DEC /* Build configuration list for PBXNativeTarget "quench" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A346723A2BD567F900E52DEC /* Debug */,
@@ -704,7 +695,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A346723C2BD567F900E52DEC /* Build configuration list for PBXNativeTarget "quenchAppTests" */ = {
+		A346723C2BD567F900E52DEC /* Build configuration list for PBXNativeTarget "quenchTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A346723D2BD567F900E52DEC /* Debug */,
@@ -713,7 +704,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A346723F2BD567F900E52DEC /* Build configuration list for PBXNativeTarget "quenchAppUITests" */ = {
+		A346723F2BD567F900E52DEC /* Build configuration list for PBXNativeTarget "quenchUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A34672402BD567F900E52DEC /* Debug */,
@@ -725,12 +716,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		A39729DA2BE98599003E8859 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */ = {
+		A3AC6F2E2BE995DC0082F0CA /* XCRemoteSwiftPackageReference "ios-places-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/googlemaps/ios-maps-sdk";
+			repositoryURL = "https://github.com/googlemaps/ios-places-sdk";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 8.4.0;
+				minimumVersion = 8.5.0;
 			};
 		};
 		A3C3F4022BE18C7400EB5993 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
@@ -744,25 +735,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		A39729DB2BE98599003E8859 /* GoogleMaps */ = {
+		A3AC6F2F2BE995DC0082F0CA /* GooglePlaces */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A39729DA2BE98599003E8859 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
-			productName = GoogleMaps;
-		};
-		A39729DD2BE98599003E8859 /* GoogleMapsBase */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A39729DA2BE98599003E8859 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
-			productName = GoogleMapsBase;
-		};
-		A39729DF2BE98599003E8859 /* GoogleMapsCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A39729DA2BE98599003E8859 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
-			productName = GoogleMapsCore;
-		};
-		A39729E12BE98599003E8859 /* GoogleMapsM4B */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A39729DA2BE98599003E8859 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
-			productName = GoogleMapsM4B;
+			package = A3AC6F2E2BE995DC0082F0CA /* XCRemoteSwiftPackageReference "ios-places-sdk" */;
+			productName = GooglePlaces;
 		};
 		A3C3F4032BE18C7400EB5993 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
