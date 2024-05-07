@@ -11,7 +11,7 @@ struct ContentView: View {
     @State var signInModel = SignInViewModel()
         
     var body: some View {
-        ZStack{
+        ZStack {
             Color.black
                 .ignoresSafeArea()
             

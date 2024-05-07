@@ -8,7 +8,6 @@
 import SwiftUI
 import SwiftData
 
-
 struct quenchApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([

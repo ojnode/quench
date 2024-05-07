@@ -20,6 +20,11 @@
 		A39A481C2BDEDDB300CEEEFA /* user.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39A481B2BDEDDB300CEEEFA /* user.swift */; };
 		A39E78162BE404BB00F3FF2C /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39E78152BE404BB00F3FF2C /* HomeView.swift */; };
 		A3AC6F302BE995DC0082F0CA /* GooglePlaces in Frameworks */ = {isa = PBXBuildFile; productRef = A3AC6F2F2BE995DC0082F0CA /* GooglePlaces */; };
+		A3AC6F322BE99EEF0082F0CA /* mapview.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3AC6F312BE99EEF0082F0CA /* mapview.swift */; };
+		A3AC6F352BE99F810082F0CA /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = A3AC6F342BE99F810082F0CA /* GoogleMaps */; };
+		A3AC6F372BE99F810082F0CA /* GoogleMapsBase in Frameworks */ = {isa = PBXBuildFile; productRef = A3AC6F362BE99F810082F0CA /* GoogleMapsBase */; };
+		A3AC6F392BE99F810082F0CA /* GoogleMapsCore in Frameworks */ = {isa = PBXBuildFile; productRef = A3AC6F382BE99F810082F0CA /* GoogleMapsCore */; };
+		A3AC6F3B2BE99F810082F0CA /* GoogleMapsM4B in Frameworks */ = {isa = PBXBuildFile; productRef = A3AC6F3A2BE99F810082F0CA /* GoogleMapsM4B */; };
 		A3C3F4012BE18B1D00EB5993 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A3C3F4002BE18B1D00EB5993 /* GoogleService-Info.plist */; };
 		A3C3F4042BE18C7400EB5993 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = A3C3F4032BE18C7400EB5993 /* FirebaseAnalytics */; };
 		A3C3F4062BE18C7400EB5993 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = A3C3F4052BE18C7400EB5993 /* FirebaseAnalyticsOnDeviceConversion */; };
@@ -86,6 +91,7 @@
 		A39729D82BE973B8003E8859 /* setGoals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = setGoals.swift; sourceTree = "<group>"; };
 		A39A481B2BDEDDB300CEEEFA /* user.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = user.swift; sourceTree = "<group>"; };
 		A39E78152BE404BB00F3FF2C /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		A3AC6F312BE99EEF0082F0CA /* mapview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mapview.swift; sourceTree = "<group>"; };
 		A3C3F4002BE18B1D00EB5993 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A3C3F4392BE18D3900EB5993 /* quechAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = quechAuth.swift; sourceTree = "<group>"; };
 		A3C3F43B2BE1910000EB5993 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
@@ -109,7 +115,9 @@
 				A3C3F40A2BE18C7400EB5993 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				A3C3F4102BE18C7400EB5993 /* FirebaseAuth in Frameworks */,
 				A3C3F4142BE18C7400EB5993 /* FirebaseCrashlytics in Frameworks */,
+				A3AC6F352BE99F810082F0CA /* GoogleMaps in Frameworks */,
 				A3C3F4342BE18C7400EB5993 /* FirebaseRemoteConfigSwift in Frameworks */,
+				A3AC6F372BE99F810082F0CA /* GoogleMapsBase in Frameworks */,
 				A3C3F4262BE18C7400EB5993 /* FirebaseInAppMessaging-Beta in Frameworks */,
 				A3C3F4182BE18C7400EB5993 /* FirebaseDatabaseSwift in Frameworks */,
 				A3C3F4222BE18C7400EB5993 /* FirebaseFunctions in Frameworks */,
@@ -119,10 +127,12 @@
 				A3C3F4122BE18C7400EB5993 /* FirebaseAuthCombine-Community in Frameworks */,
 				A3C3F4302BE18C7400EB5993 /* FirebasePerformance in Frameworks */,
 				A3C3F4282BE18C7400EB5993 /* FirebaseInAppMessagingSwift-Beta in Frameworks */,
+				A3AC6F392BE99F810082F0CA /* GoogleMapsCore in Frameworks */,
 				A3C3F4362BE18C7400EB5993 /* FirebaseStorage in Frameworks */,
 				A3C3F41A2BE18C7400EB5993 /* FirebaseDynamicLinks in Frameworks */,
 				A3C3F41E2BE18C7400EB5993 /* FirebaseFirestoreCombine-Community in Frameworks */,
 				A3C3F42E2BE18C7400EB5993 /* FirebaseMessaging in Frameworks */,
+				A3AC6F3B2BE99F810082F0CA /* GoogleMapsM4B in Frameworks */,
 				A3C3F42A2BE18C7400EB5993 /* FirebaseInstallations in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -172,6 +182,7 @@
 				A39A481A2BDEDD9A00CEEEFA /* user */,
 				A34672162BD567F700E52DEC /* quenchApp.swift */,
 				A34672182BD567F700E52DEC /* ContentView.swift */,
+				A3AC6F312BE99EEF0082F0CA /* mapview.swift */,
 				A39729D82BE973B8003E8859 /* setGoals.swift */,
 				A346721A2BD567F700E52DEC /* Item.swift */,
 				A346721C2BD567F900E52DEC /* Assets.xcassets */,
@@ -262,6 +273,10 @@
 				A3C3F4352BE18C7400EB5993 /* FirebaseStorage */,
 				A3C3F4372BE18C7400EB5993 /* FirebaseStorageCombine-Community */,
 				A3AC6F2F2BE995DC0082F0CA /* GooglePlaces */,
+				A3AC6F342BE99F810082F0CA /* GoogleMaps */,
+				A3AC6F362BE99F810082F0CA /* GoogleMapsBase */,
+				A3AC6F382BE99F810082F0CA /* GoogleMapsCore */,
+				A3AC6F3A2BE99F810082F0CA /* GoogleMapsM4B */,
 			);
 			productName = quench;
 			productReference = A34672132BD567F700E52DEC /* quench.app */;
@@ -338,6 +353,7 @@
 			packageReferences = (
 				A3C3F4022BE18C7400EB5993 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				A3AC6F2E2BE995DC0082F0CA /* XCRemoteSwiftPackageReference "ios-places-sdk" */,
+				A3AC6F332BE99F810082F0CA /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
 			);
 			productRefGroup = A34672142BD567F700E52DEC /* Products */;
 			projectDirPath = "";
@@ -387,6 +403,7 @@
 				A39A481C2BDEDDB300CEEEFA /* user.swift in Sources */,
 				A34672192BD567F700E52DEC /* ContentView.swift in Sources */,
 				A346721B2BD567F700E52DEC /* Item.swift in Sources */,
+				A3AC6F322BE99EEF0082F0CA /* mapview.swift in Sources */,
 				A36488C22BDAD06400A267B9 /* Register.swift in Sources */,
 				A39E78162BE404BB00F3FF2C /* HomeView.swift in Sources */,
 				A34672172BD567F700E52DEC /* quenchApp.swift in Sources */,
@@ -724,6 +741,14 @@
 				minimumVersion = 8.5.0;
 			};
 		};
+		A3AC6F332BE99F810082F0CA /* XCRemoteSwiftPackageReference "ios-maps-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googlemaps/ios-maps-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.4.0;
+			};
+		};
 		A3C3F4022BE18C7400EB5993 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -739,6 +764,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A3AC6F2E2BE995DC0082F0CA /* XCRemoteSwiftPackageReference "ios-places-sdk" */;
 			productName = GooglePlaces;
+		};
+		A3AC6F342BE99F810082F0CA /* GoogleMaps */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A3AC6F332BE99F810082F0CA /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
+			productName = GoogleMaps;
+		};
+		A3AC6F362BE99F810082F0CA /* GoogleMapsBase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A3AC6F332BE99F810082F0CA /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
+			productName = GoogleMapsBase;
+		};
+		A3AC6F382BE99F810082F0CA /* GoogleMapsCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A3AC6F332BE99F810082F0CA /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
+			productName = GoogleMapsCore;
+		};
+		A3AC6F3A2BE99F810082F0CA /* GoogleMapsM4B */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A3AC6F332BE99F810082F0CA /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
+			productName = GoogleMapsM4B;
 		};
 		A3C3F4032BE18C7400EB5993 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
