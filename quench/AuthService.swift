@@ -20,9 +20,12 @@ final class AuthService {
         currentUser = auth.currentUser
     }
     
-    func registerEmail(email: String, password: String) async throws {
+    func registerEmail(email: String, password: String, firstName: String, lastName: String) async throws {
+        var displayName = "\(firstName) \(lastName)"
         let result = try await auth.createUser(withEmail: email, password: password)
         currentUser = result.user
+        let changeRequest = currentUser?.createProfileChangeRequest()
+        changeRequest?.displayName = displayName
     }
     
     func signInEmail(email: String, password: String) async throws {

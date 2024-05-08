@@ -77,14 +77,27 @@ struct AllButtonStyle: ButtonStyle {
 class SignInViewModel {
     var email = ""
     var password = ""
+    var firstName = ""
+    var lastName = ""
     
     func signInWithEmail() {
         Task {
             do {
-               try await AuthService.shared.registerEmail(email: email, password: password)
+               try await AuthService.shared.signInEmail(email: email, password: password)
             } catch {
                 print(error.localizedDescription)
             }
         }
     }
+    
+    func signUpWithEmail() {
+        Task {
+            do {
+               try await AuthService.shared.registerEmail(email: email, password: password, firstName: firstName, lastName: lastName)
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
 }

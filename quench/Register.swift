@@ -9,11 +9,12 @@ import SwiftUI
 import SwiftData
 
 struct RegisterView: View {
+    @State var signInModel = SignInViewModel()
     @State var firstName: String = ""
     @State var lastName: String = ""
     @State var userName: String = ""
+    @State var email: String = ""
     @State var password: String = ""
-    @State var newUser: User? = nil
     
     var body: some View {
         ZStack {
@@ -57,6 +58,16 @@ struct RegisterView: View {
                     }
                     
                     HStack {
+                        Text("Email")
+                            .font(.system(size:20, weight: .medium))
+                            .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                        TextField("Enter your Email", text:$userName)
+                            .multilineTextAlignment(.center)
+                            .textFieldStyle(.roundedBorder)
+                            .padding()
+                    }
+                    
+                    HStack {
                         Text("Password")
                             .font(.system(size:20, weight: .medium))
                             .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
@@ -70,9 +81,7 @@ struct RegisterView: View {
             
                 Spacer()
                 Button(action: {
-                    newUser = User(firstName: firstName, lastName: lastName, userName: userName)
-                    newUser?.store()
-                }) {
+                    signInModel.signUpWithEmail()                }) {
                     Text("Register")
                 }
                 
