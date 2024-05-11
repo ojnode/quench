@@ -9,48 +9,48 @@ import SwiftData
 
 struct ContentView: View {
     @State var signInModel = SignInViewModel()
-        
+    
     var body: some View {
-        ZStack {
-            Color.black
-                .ignoresSafeArea()
-            
-            VStack (spacing: 90){
-                VStack {
-                    Text("Quench")
-                        .font(.system(size:70, weight: .medium))
-                        .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                    Text("One day at a time")
-                        .font(Font.custom("Papyrus", size: 20))
-                        .foregroundColor(Color("mottoColor"))
-                }
-                Spacer()
+        NavigationView {
+            ZStack {
+                Color.black
+                    .ignoresSafeArea()
                 
-                VStack {
-                    TextField("Enter your username or email", text:$signInModel.email)
-                        .multilineTextAlignment(.center)
-                        .frame(maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
-                        .textFieldStyle(.roundedBorder)
-                        .padding()
-                    SecureField("Password", text:$signInModel.password)
-                        .multilineTextAlignment(.center)
-                        .frame(maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
-                        .textFieldStyle(.roundedBorder)
-                        .padding()
-                    Button("Sign In") {
-                        signInModel.signInWithEmail()
+                VStack (spacing: 90){
+                    VStack {
+                        Text("Quench")
+                            .font(.system(size:70, weight: .medium))
+                            .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                        Text("One day at a time")
+                            .font(Font.custom("Papyrus", size: 20))
+                            .foregroundColor(Color("mottoColor"))
                     }
-                    .buttonStyle(AllButtonStyle())
-                }
-                Spacer()
-                
-                HStack {
-                    Button("Register") {
-                        
+                    Spacer()
+                    
+                    VStack {
+                        TextField("Enter your username or email", text:$signInModel.email)
+                            .multilineTextAlignment(.center)
+                            .frame(maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                            .textFieldStyle(.roundedBorder)
+                            .padding()
+                        SecureField("Password", text:$signInModel.password)
+                            .multilineTextAlignment(.center)
+                            .frame(maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                            .textFieldStyle(.roundedBorder)
+                            .padding()
+                        Button("Sign In") {
+                            signInModel.signInWithEmail()
+                        }
+                        .buttonStyle(AllButtonStyle())
+                    }
+                    
+                    
+                    
+                    
+                    NavigationLink(destination: RegisterView()){
+                        Text("Register")
                     }
                 }
-                .buttonStyle(AllButtonStyle())
-                Spacer()
             }
         }
     }
