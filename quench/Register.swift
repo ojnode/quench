@@ -17,83 +17,92 @@ struct RegisterView: View {
     @State var password: String = ""
     
     var body: some View {
-        ZStack {
-            Color.black
-                .ignoresSafeArea()
-
-            VStack (spacing: 100) {
+            ZStack {
+                Color.black
+                    .ignoresSafeArea()
                 
-                Text("Quench")
-                    .font(.system(size:20, weight: .light))
-                    .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                VStack (spacing:65) {
-                    HStack {
-                        Text("First Name")
-                            .font(.system(size:20, weight: .medium))
-                            .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                        TextField("Enter your first name", text:$firstName)
-                            .multilineTextAlignment(.center)
-                            .textFieldStyle(.roundedBorder)
+                VStack (spacing: 100) {
+                    
+                    Text("Quench")
+                        .font(.system(size:20, weight: .light))
+                        .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                    VStack (spacing:65) {
+                        HStack {
+                            Text("First Name")
+                                .font(.system(size:20, weight: .medium))
+                                .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                            TextField("Enter your first name", text:$firstName)
+                                .multilineTextAlignment(.center)
+                                .textFieldStyle(.roundedBorder)
                             
+                        }
+                        
+                        HStack {
+                            Text("Last Name")
+                                .font(.system(size:20, weight: .medium))
+                                .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                            TextField("Enter your last name", text:$lastName)
+                                .multilineTextAlignment(.center)
+                                .textFieldStyle(.roundedBorder)
+                                .padding()
+                        }
+                        
+                        HStack {
+                            Text("Username")
+                                .font(.system(size:20, weight: .medium))
+                                .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                            TextField("Enter your username", text:$userName)
+                                .multilineTextAlignment(.center)
+                                .textFieldStyle(.roundedBorder)
+                                .padding()
+                        }
+                        
+                        HStack {
+                            Text("Email")
+                                .font(.system(size:20, weight: .medium))
+                                .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                            TextField("Enter your Email", text:$userName)
+                                .multilineTextAlignment(.center)
+                                .textFieldStyle(.roundedBorder)
+                                .padding()
+                        }
+                        
+                        HStack {
+                            Text("Password")
+                                .font(.system(size:20, weight: .medium))
+                                .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                            TextField("Enter your password", text:$password)
+                                .multilineTextAlignment(.center)
+                                .textFieldStyle(.roundedBorder)
+                                .padding()
+                        }
+                        
+                        HStack {
+                            Text("Already have an account?")
+                                .font(.system(size:20, weight: .medium))
+                                .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                            
+                            NavigationLink(destination: ContentView().navigationBarBackButtonHidden(true)) {
+                                Text("Login")
+                                    .font(.system(size:20, weight: .medium))
+                                    .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                            }
+                            
+                        }
                     }
                     
-                    HStack {
-                        Text("Last Name")
-                            .font(.system(size:20, weight: .medium))
-                            .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                        TextField("Enter your last name", text:$lastName)
-                            .multilineTextAlignment(.center)
-                            .textFieldStyle(.roundedBorder)
-                            .padding()
-                    }
-                    
-                    HStack {
-                        Text("Username")
-                            .font(.system(size:20, weight: .medium))
-                            .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                        TextField("Enter your username", text:$userName)
-                            .multilineTextAlignment(.center)
-                            .textFieldStyle(.roundedBorder)
-                            .padding()
-                    }
-                    
-                    HStack {
-                        Text("Email")
-                            .font(.system(size:20, weight: .medium))
-                            .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                        TextField("Enter your Email", text:$userName)
-                            .multilineTextAlignment(.center)
-                            .textFieldStyle(.roundedBorder)
-                            .padding()
-                    }
-                    
-                    HStack {
-                        Text("Password")
-                            .font(.system(size:20, weight: .medium))
-                            .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                        TextField("Enter your password", text:$password)
-                            .multilineTextAlignment(.center)
-                            .textFieldStyle(.roundedBorder)
-                            .padding()
-                    }
-                    
+                    Spacer()
+                    Button(action: {
+                        signInModel.signUpWithEmail()                }) {
+                            Text("Register")
+                        }
+
                 }
-            
-                Spacer()
-                Button(action: {
-                    signInModel.signUpWithEmail()                }) {
-                    Text("Register")
-                }
-                
-                
                 
             }
- 
+            
         }
-
     }
-    
-}
 
 
 #Preview {

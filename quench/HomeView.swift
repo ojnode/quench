@@ -11,7 +11,6 @@ struct HomeView: View {
     
     var body: some View {
         ZStack {
-            NavigationStack {
                 NavigationLink(destination: SetGoal()) {
                     Image(.homepage)
                         .resizable()
@@ -28,7 +27,6 @@ struct HomeView: View {
                     
                     Text("socials")
                 }
-            }
         }
     }
 }

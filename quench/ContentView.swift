@@ -11,45 +11,45 @@ struct ContentView: View {
     @State var signInModel = SignInViewModel()
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
                 Color.black
                     .ignoresSafeArea()
                 
-                VStack (spacing: 90){
-                    VStack {
+    
+                VStack (spacing: 30) {
+                    
                         Text("Quench")
                             .font(.system(size:70, weight: .medium))
                             .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
                         Text("One day at a time")
                             .font(Font.custom("Papyrus", size: 20))
                             .foregroundColor(Color("mottoColor"))
-                    }
-                    Spacer()
-                    
-                    VStack {
+                        Spacer()
+
                         TextField("Enter your username or email", text:$signInModel.email)
                             .multilineTextAlignment(.center)
-                            .frame(maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
                             .textFieldStyle(.roundedBorder)
                             .padding()
                         SecureField("Password", text:$signInModel.password)
                             .multilineTextAlignment(.center)
-                            .frame(maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
                             .textFieldStyle(.roundedBorder)
                             .padding()
                         Button("Sign In") {
                             signInModel.signInWithEmail()
                         }
                         .buttonStyle(AllButtonStyle())
-                    }
                     
-                    
-                    
-                    
-                    NavigationLink(destination: RegisterView()){
-                        Text("Register")
-                    }
+                        NavigationLink(destination: RegisterView().navigationBarBackButtonHidden(true)){
+                            HStack {
+                                Text("Register")
+                                    .foregroundColor(.black)
+                                    .padding()
+                                    .background(Color.blue)
+                                    .cornerRadius(20)
+                            }
+                        }
+                    Spacer()
                 }
             }
         }

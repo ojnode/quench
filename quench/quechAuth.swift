@@ -32,10 +32,12 @@ struct quenchAuthApp: App {
     
     var body: some Scene {
         WindowGroup {
-            if (AuthService.shared.currentUser != nil) {
-                HomeView()
-            } else {
-                GoogleMapsView()
+            NavigationStack {
+                if (AuthService.shared.currentUser != nil) {
+                    HomeView()
+                } else {
+                    GoogleMapsView()
+                }
             }
         }
     }

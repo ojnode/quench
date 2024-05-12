@@ -18,7 +18,6 @@ struct SetGoal: View {
     var body: some View {
         ZStack {
             VStack (spacing: 30) {
-                
                 HStack {
                     Text("Age")
                         .font(.system(size:20, weight: .medium))
