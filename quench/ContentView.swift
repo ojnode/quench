@@ -8,7 +8,7 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @State var signInModel = SignInViewModel()
+    @State var userSession = UserSession()
     
     var body: some View {
         NavigationStack {
@@ -16,30 +16,30 @@ struct ContentView: View {
                 Color.black
                     .ignoresSafeArea()
                 
-    
-                VStack (spacing: 30) {
+                VStack (spacing:30) {
+                    Text("Quench")
+                        .font(.system(size:70, weight: .medium))
+                        .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                    Text("One day at a time")
+                        .font(Font.custom("Papyrus", size: 20))
+                        .foregroundColor(Color("mottoColor"))
+                    Spacer()
                     
-                        Text("Quench")
-                            .font(.system(size:70, weight: .medium))
-                            .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                        Text("One day at a time")
-                            .font(Font.custom("Papyrus", size: 20))
-                            .foregroundColor(Color("mottoColor"))
-                        Spacer()
-
-                        TextField("Enter your username or email", text:$signInModel.email)
+                    VStack (spacing:10) {
+                        TextField("Enter your username or email", text:$userSession.email)
                             .multilineTextAlignment(.center)
                             .textFieldStyle(.roundedBorder)
                             .padding()
-                        SecureField("Password", text:$signInModel.password)
+                        SecureField("Password", text:$userSession.password)
                             .multilineTextAlignment(.center)
                             .textFieldStyle(.roundedBorder)
                             .padding()
                         Button("Sign In") {
-                            signInModel.signInWithEmail()
+                            userSession.signInWithEmail()
                         }
                         .buttonStyle(AllButtonStyle())
-                    
+                        Spacer()
+                        
                         NavigationLink(destination: RegisterView().navigationBarBackButtonHidden(true)){
                             HStack {
                                 Text("Register")
@@ -49,7 +49,8 @@ struct ContentView: View {
                                     .cornerRadius(20)
                             }
                         }
-                    Spacer()
+                        Spacer()
+                    }
                 }
             }
         }
@@ -74,7 +75,7 @@ struct AllButtonStyle: ButtonStyle {
 
 }
 
-class SignInViewModel {
+class UserSession {
     var email = ""
     var password = ""
     var firstName = ""

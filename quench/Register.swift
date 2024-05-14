@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct RegisterView: View {
-    @State var signInModel = SignInViewModel()
+    @State var userSession = UserSession()
     @State var firstName: String = ""
     @State var lastName: String = ""
     @State var userName: String = ""
@@ -21,14 +21,13 @@ struct RegisterView: View {
                 Color.black
                     .ignoresSafeArea()
                 
-                VStack (spacing: 10) {
-                    
+                VStack (spacing: 20) {
                     Text("Quench")
                         .font(.system(size:40, weight: .light))
                         .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
                     Spacer()
                     
-                    VStack (spacing:50) {
+                    VStack (spacing:70) {
                         HStack {
                             Text("First Name")
                                 .font(.system(size:20, weight: .medium))
@@ -45,7 +44,6 @@ struct RegisterView: View {
                             TextField("Enter your last name", text:$lastName)
                                 .multilineTextAlignment(.center)
                                 .textFieldStyle(.roundedBorder)
-                                .padding()
                         }
                         
                         HStack {
@@ -55,7 +53,6 @@ struct RegisterView: View {
                             TextField("Enter your username", text:$userName)
                                 .multilineTextAlignment(.center)
                                 .textFieldStyle(.roundedBorder)
-                                .padding()
                         }
                         
                         HStack {
@@ -65,7 +62,6 @@ struct RegisterView: View {
                             TextField("Enter your Email", text:$userName)
                                 .multilineTextAlignment(.center)
                                 .textFieldStyle(.roundedBorder)
-                                .padding()
                         }
                         
                         HStack {
@@ -75,18 +71,14 @@ struct RegisterView: View {
                             TextField("Enter your password", text:$password)
                                 .multilineTextAlignment(.center)
                                 .textFieldStyle(.roundedBorder)
-                                .padding()
                         }
                         
-                        Button(action: {
-                            signInModel.signUpWithEmail()                }) {
-                                Text("Register")
-                                    .font(.system(size: 25))
-                                    .buttonStyle(AllButtonStyle())
-                            }
+                        Button("Register") {
+                            userSession.signUpWithEmail()
+                        }
+                        .buttonStyle(AllButtonStyle())
 
                         HStack {
-                                                        
                             Text("Already have an account?")
                                 .font(.system(size:20, weight: .medium))
                                 .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
@@ -96,7 +88,6 @@ struct RegisterView: View {
                                     .font(.system(size:20, weight: .medium))
                                     .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
                             }
-                            
                         }
                     }
                 }
