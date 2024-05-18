@@ -15,25 +15,18 @@ struct SetGoal: View {
     @State var height = ""
     @State var sex = ""
     
-    var checkWeight: valueType {
-        guard let weight = Double(weight) else {
-            return .string("Use numbers only")
-        }
-        return .double(weight)
-    }
-    
-    var checkHeight: valueType {
-        guard let height = Double(height) else {
-            return .string("Use numbers only")
-        }
-        return .double(height)
-    }
-    
-    var checkAge: valueType {
-        guard let age = Int(age) else {
-            return .string("Use numbers only")
-        }
-        return .int(age)
+    func valueValidation() throws -> (age: Int, weight: Double, height: Double) {
+            guard let weight = Double(weight) else {
+                throw valueError.weightError
+            }
+            guard let height = Double(height) else {
+                throw valueError.heightError
+            }
+            guard let age = Int(age) else {
+                throw valueError.ageError
+            }
+        
+        return (age, weight, height)
     }
     
     var body: some View {
@@ -88,8 +81,8 @@ struct SetGoal: View {
         .modelContainer(for: Item.self, inMemory: true)
 }
 
-enum valueType {
-    case double(Double)
-    case string(String)
-    case int(Int)
+enum valueError: Error {
+    case weightError
+    case heightError
+    case ageError
 }
