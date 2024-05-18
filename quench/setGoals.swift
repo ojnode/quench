@@ -10,10 +10,31 @@ import SwiftUI
 
 struct SetGoal: View {
     
-    @State var age: String = ""
-    @State var weight: String = ""
-    @State var height: String = ""
-    @State var sex: String = ""
+    @State var age = ""
+    @State var weight = ""
+    @State var height = ""
+    @State var sex = ""
+    
+    var checkWeight: valueType {
+        guard let weight = Double(weight) else {
+            return .string("Use numbers only")
+        }
+        return .double(weight)
+    }
+    
+    var checkHeight: valueType {
+        guard let height = Double(height) else {
+            return .string("Use numbers only")
+        }
+        return .double(height)
+    }
+    
+    var checkAge: valueType {
+        guard let age = Int(age) else {
+            return .string("Use numbers only")
+        }
+        return .int(age)
+    }
     
     var body: some View {
         ZStack {
@@ -65,4 +86,10 @@ struct SetGoal: View {
 #Preview {
     SetGoal()
         .modelContainer(for: Item.self, inMemory: true)
+}
+
+enum valueType {
+    case double(Double)
+    case string(String)
+    case int(Int)
 }
