@@ -71,6 +71,11 @@ struct SetGoal: View {
                         .textFieldStyle(.roundedBorder)
                         .padding()
                 }
+                
+                Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
+                    Text("Set Goal")
+                })
+                .buttonStyle(AllButtonStyle())
             }
         }
     }
