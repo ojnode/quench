@@ -13,7 +13,7 @@ struct SetGoal: View {
     @State var age = ""
     @State var weight = ""
     @State var height = ""
-    @State var sex = ""
+    @State var gender = ""
     
     func valueValidation() throws -> (age: Int, weight: Double, height: Double) {
             guard let weight = Double(weight) else {
@@ -32,14 +32,14 @@ struct SetGoal: View {
     var body: some View {
         ZStack {
             VStack (spacing: 40) {
+                    
+                    UserAttributes(Label: "Age", text: $age)
                 
-                    attributeFormatting(Label: "Age", text: $age)
+                    UserAttributes(Label: "Weight", text: $weight)
                 
-                    attributeFormatting(Label: "Weight", text: $age)
+                    UserAttributes(Label: "Height", text: $height)
                 
-                    attributeFormatting(Label: "Height", text: $age)
-                
-                    attributeFormatting(Label: "Gender", text: $age)
+                    UserAttributes(Label: "Gender", text: $gender)
                 
                 Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
                     Text("Set Goal")
@@ -55,15 +55,21 @@ struct SetGoal: View {
         .modelContainer(for: Item.self, inMemory: true)
 }
 
-func attributeFormatting(Label: String, text: Binding<String>) -> some View {
-    return HStack {
-                Text(Label)
-                    .font(.system(size:20, weight: .medium))
-                    .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                TextField("Enter your \(Label)", text: text)
-                    .multilineTextAlignment(.center)
-                    .textFieldStyle(.roundedBorder)
-                    .padding()
+struct UserAttributes: View {
+    
+    var Label: String
+    var text: Binding<String>
+    
+    var body: some View {
+        HStack {
+            Text(Label)
+                .font(.system(size:20, weight: .medium))
+                .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+            TextField("Enter your \(Label)", text: text)
+                .multilineTextAlignment(.center)
+                .textFieldStyle(.roundedBorder)
+                .padding()
+        }
     }
 }
 
