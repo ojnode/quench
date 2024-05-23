@@ -31,46 +31,15 @@ struct SetGoal: View {
     
     var body: some View {
         ZStack {
-            VStack (spacing: 30) {
-                HStack {
-                    Text("Age")
-                        .font(.system(size:20, weight: .medium))
-                        .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                    TextField("Enter your password", text:$age)
-                        .multilineTextAlignment(.center)
-                        .textFieldStyle(.roundedBorder)
-                        .padding()
-                }
+            VStack (spacing: 40) {
                 
-                HStack {
-                    Text("Weight")
-                        .font(.system(size:20, weight: .medium))
-                        .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                    TextField("Enter your password", text:$weight)
-                        .multilineTextAlignment(.center)
-                        .textFieldStyle(.roundedBorder)
-                        .padding()
-                }
+                    attributeFormatting(Label: "Age", text: $age)
                 
-                HStack {
-                    Text("Height")
-                        .font(.system(size:20, weight: .medium))
-                        .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                    TextField("Enter your password", text:$height)
-                        .multilineTextAlignment(.center)
-                        .textFieldStyle(.roundedBorder)
-                        .padding()
-                }
+                    attributeFormatting(Label: "Weight", text: $age)
                 
-                HStack {
-                    Text("Sex")
-                        .font(.system(size:20, weight: .medium))
-                        .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                    TextField("Enter your password", text:$sex)
-                        .multilineTextAlignment(.center)
-                        .textFieldStyle(.roundedBorder)
-                        .padding()
-                }
+                    attributeFormatting(Label: "Height", text: $age)
+                
+                    attributeFormatting(Label: "Gender", text: $age)
                 
                 Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
                     Text("Set Goal")
@@ -84,6 +53,18 @@ struct SetGoal: View {
 #Preview {
     SetGoal()
         .modelContainer(for: Item.self, inMemory: true)
+}
+
+func attributeFormatting(Label: String, text: Binding<String>) -> some View {
+    return HStack {
+                Text(Label)
+                    .font(.system(size:20, weight: .medium))
+                    .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                TextField("Enter your \(Label)", text: text)
+                    .multilineTextAlignment(.center)
+                    .textFieldStyle(.roundedBorder)
+                    .padding()
+    }
 }
 
 enum valueError: Error {
