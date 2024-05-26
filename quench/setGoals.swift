@@ -33,13 +33,13 @@ struct SetGoal: View {
         ZStack {
             VStack (spacing: 40) {
                     
-                    UserAttributes(Label: "Age", text: $age)
+                    createEntryField(Label: "Age", text: $age)
                 
-                    UserAttributes(Label: "Weight", text: $weight)
+                    createEntryField(Label: "Weight", text: $weight)
                 
-                    UserAttributes(Label: "Height", text: $height)
+                    createEntryField(Label: "Height", text: $height)
                 
-                    UserAttributes(Label: "Gender", text: $gender)
+                    createEntryField(Label: "Gender", text: $gender)
                 
                 Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
                     Text("Set Goal")
@@ -55,7 +55,7 @@ struct SetGoal: View {
         .modelContainer(for: Item.self, inMemory: true)
 }
 
-struct UserAttributes: View {
+struct createEntryField: View {
     
     var Label: String
     var text: Binding<String>
