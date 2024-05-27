@@ -10,11 +10,11 @@ import SwiftData
 
 struct RegisterView: View {
     @State var userSession = UserSession()
-    @State var firstName: String = ""
-    @State var lastName: String = ""
-    @State var userName: String = ""
-    @State var email: String = ""
-    @State var password: String = ""
+    @State var firstName = ""
+    @State var lastName = ""
+    @State var userName = ""
+    @State var email = ""
+    @State var password  = ""
     
     var body: some View {
         ZStack {
@@ -29,16 +29,16 @@ struct RegisterView: View {
                 
                 VStack (spacing:50) {
                     
-                    createEntryField(Label: "First Name", text: $firstName)
+                    createEntryField(label: "First Name", text: $firstName)
                     
-                    createEntryField(Label: "Last Name", text: $lastName)
+                    createEntryField(label: "Last Name", text: $lastName)
                     
-                    createEntryField(Label: "Username", text: $userName)
+                    createEntryField(label: "Username", text: $userName)
                     
-                    createEntryField(Label: "Email", text: 
+                    createEntryField(label: "Email", text:
                         $email)
 
-                    createEntryField(Label: "Password", text: $password)
+                    createEntryField(label: "Password", text: $password)
 
                     
                     Button("Register") {

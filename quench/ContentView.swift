@@ -16,32 +16,30 @@ struct ContentView: View {
                 Color.black
                     .ignoresSafeArea()
                 
-                VStack (spacing:30) {
-                    Text("Quench")
-                        .font(.system(size:70, weight: .medium))
-                        .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                    Text("One day at a time")
-                        .font(Font.custom("Papyrus", size: 20))
-                        .foregroundColor(Color("mottoColor"))
+                VStack (spacing:40) {
+                    
+                    VStack {
+                        CreateText(label: "Quench", size: 70, weight: .medium)
+                        
+                        CreateText(label: "One day at a time", size: 20, design: .serif)
+                    }
                     Spacer()
                     
                     VStack (spacing:10) {
-                        TextField("Enter your username or email", text:$userSession.email)
-                            .multilineTextAlignment(.center)
-                            .textFieldStyle(.roundedBorder)
-                            .padding()
-                        SecureField("Password", text:$userSession.password)
-                            .multilineTextAlignment(.center)
-                            .textFieldStyle(.roundedBorder)
-                            .padding()
+                        
+                        CreateTextField(text: "Enter your username or email", inputText: $userSession.email)
+                        
+                        CreateSecureField(text: "Password", inputText: $userSession.password)
+                        
                         Button("Sign In") {
                             userSession.signInWithEmail()
                         }
                         .buttonStyle(AllButtonStyle())
                         Spacer()
                         
-                        NavigationLink(destination: RegisterView().navigationBarBackButtonHidden(true)){
+                        NavigationLink(destination: RegisterView().navigationBarBackButtonHidden(true)) {
                             HStack {
+                                
                                 Text("Register")
                                     .foregroundColor(.black)
                                     .padding()
@@ -72,7 +70,47 @@ struct AllButtonStyle: ButtonStyle {
       .background(configuration.isPressed ? Color.red : Color.blue)
       .cornerRadius(20.0)
   }
+}
 
+struct CreateText: View {
+    
+    var label: String
+    var size: Double
+    var weight: Font.Weight = .light
+    var color: Color = .blue
+    var design: Font.Design = .default
+    
+    var body: some View {
+        Text(label)
+            .font(.system(size:size, weight: weight, design: design))
+            .foregroundColor(color)
+    }
+}
+
+struct CreateTextField: View {
+    
+    var text: String
+    var inputText: Binding<String>
+    
+    var body: some View {
+        TextField(text, text: inputText)
+            .multilineTextAlignment(.center)
+            .textFieldStyle(.roundedBorder)
+            .padding()
+    }
+}
+
+struct CreateSecureField: View {
+    
+    var text: String
+    var inputText: Binding<String>
+    
+    var body: some View {
+        SecureField(text, text:inputText)
+            .multilineTextAlignment(.center)
+            .textFieldStyle(.roundedBorder)
+            .padding()
+    }
 }
 
 class UserSession {

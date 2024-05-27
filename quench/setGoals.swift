@@ -33,13 +33,13 @@ struct SetGoal: View {
         ZStack {
             VStack (spacing: 40) {
                     
-                    createEntryField(Label: "Age", text: $age)
+                    createEntryField(label: "Age", text: $age)
                 
-                    createEntryField(Label: "Weight", text: $weight)
+                    createEntryField(label: "Weight", text: $weight)
                 
-                    createEntryField(Label: "Height", text: $height)
+                    createEntryField(label: "Height", text: $height)
                 
-                    createEntryField(Label: "Gender", text: $gender)
+                    createEntryField(label: "Gender", text: $gender)
                 
                 Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
                     Text("Set Goal")
@@ -57,21 +57,17 @@ struct SetGoal: View {
 
 struct createEntryField: View {
     
-    var Label: String
+    var label: String
     var text: Binding<String>
     
     var body: some View {
         HStack {
-            Text(Label)
-                .font(.system(size:20, weight: .medium))
-                .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-            TextField("Enter your \(Label)", text: text)
-                .multilineTextAlignment(.center)
-                .textFieldStyle(.roundedBorder)
-                .padding()
+            CreateText(label: label, size: 20, weight: .medium)
+            CreateTextField(text: "Enter your \(label)", inputText: text)
         }
     }
 }
+
 
 enum valueError: Error {
     case weightError
