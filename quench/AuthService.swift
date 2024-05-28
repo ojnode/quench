@@ -6,8 +6,14 @@
 //
 
 import FirebaseAuth
-
-
+// REAAADDD THIS
+// READ THIS
+// READ THIS
+//READ THIS
+//READ THIS
+//READ THIS
+// first after creating , it shouldnt assign a value to currentuser raher take back to sign in page, correct later
+// enable app check also so this damn thingworks on simulator
 @Observable
 final class AuthService {
     
@@ -16,13 +22,14 @@ final class AuthService {
     
     static let shared = AuthService()
     
-    private init() { 
+    private init() {
         currentUser = auth.currentUser
     }
     
     func registerEmail(email: String, password: String, firstName: String, lastName: String) async throws {
         let displayName = "\(firstName) \(lastName)"
         let result = try await auth.createUser(withEmail: email, password: password)
+        print(result)
         currentUser = result.user
         let changeRequest = currentUser?.createProfileChangeRequest()
         changeRequest?.displayName = displayName
@@ -33,8 +40,11 @@ final class AuthService {
         currentUser = result.user
     }
     
-    func signOut() throws {
-        try auth.signOut()
-        currentUser = nil
+    func signOut() {
+        do {try auth.signOut()
+            currentUser = nil
+        } catch {
+            print("Sign out no work")
+        }
     }
 }
