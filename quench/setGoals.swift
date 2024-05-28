@@ -59,11 +59,16 @@ struct CreateEntryField: View {
     
     var label: String
     var text: Binding<String>
+    var secure: Bool = false
     
     var body: some View {
+        
         HStack {
             CreateText(label: label, size: 20, weight: .medium)
-            CreateTextField(text: "Enter your \(label)", inputText: text)
+            if !(secure) {
+                CreateTextField(text: "Enter your \(label)", inputText: text)
+            } else { CreateSecureField(text: "Enter your \(label)", inputText: text)
+            }
         }
     }
 }
