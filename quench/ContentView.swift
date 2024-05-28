@@ -134,7 +134,8 @@ class UserSession {
     func signUpWithEmail() {
         Task {
             do {
-               try await AuthService.shared.registerEmail(email: email, password: password, firstName: firstName, lastName: lastName)
+               try await AuthService.shared.registerEmail(email: email, password: password,
+                                                          firstName: firstName, lastName: lastName)
             } catch {
                 print(error.localizedDescription)
             }
