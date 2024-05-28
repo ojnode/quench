@@ -26,6 +26,10 @@ struct HomeView: View {
                     Text("map")
                     
                     Text("socials")
+                    
+                    Button(action: {AuthService.shared.signOut()}, label: {
+                        Text("Sign out")
+                    })
                 }
         }
     }
