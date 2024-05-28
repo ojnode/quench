@@ -10,11 +10,7 @@ import SwiftData
 
 struct RegisterView: View {
     @State var userSession = UserSession()
-    @State var firstName = ""
-    @State var lastName = ""
-    @State var userName = ""
-    @State var email = ""
-    @State var password  = ""
+
     
     var body: some View {
         ZStack {
@@ -29,16 +25,16 @@ struct RegisterView: View {
                 
                 VStack (spacing:50) {
                     
-                    CreateEntryField(label: "First Name", text: $firstName)
+                    CreateEntryField(label: "First Name", text: $userSession.firstName)
                     
-                    CreateEntryField(label: "Last Name", text: $lastName)
+                    CreateEntryField(label: "Last Name", text: $userSession.lastName)
                     
-                    CreateEntryField(label: "Username", text: $userName)
+                    CreateEntryField(label: "Username", text: $userSession.userName)
                     
                     CreateEntryField(label: "Email", text:
-                        $email)
+                                        $userSession.email)
                     
-                    CreateSecureField(text: "Password", inputText: $password)
+                    CreateEntryField(label: "Password", text: $userSession.password, secure: true)
                     
                     Button("Register") {
                         userSession.signUpWithEmail()
