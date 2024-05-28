@@ -34,7 +34,8 @@ struct RegisterView: View {
                     CreateEntryField(label: "Email", text:
                                         $userSession.email)
                     
-                    CreateEntryField(label: "Password", text: $userSession.password, secure: true)
+                    CreateEntryField(label: "Password", text: $userSession.password, 
+                                     secure: true)
                     
                     Button("Register") {
                         userSession.signUpWithEmail()
