@@ -36,7 +36,7 @@ struct quenchAuthApp: App {
                 if (AuthService.shared.currentUser != nil) {
                     HomeView()
                 } else {
-                    GoogleMapsView()
+                    ContentView()
                 }
             }
         }

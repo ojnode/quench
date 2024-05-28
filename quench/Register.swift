@@ -29,17 +29,16 @@ struct RegisterView: View {
                 
                 VStack (spacing:50) {
                     
-                    createEntryField(label: "First Name", text: $firstName)
+                    CreateEntryField(label: "First Name", text: $firstName)
                     
-                    createEntryField(label: "Last Name", text: $lastName)
+                    CreateEntryField(label: "Last Name", text: $lastName)
                     
-                    createEntryField(label: "Username", text: $userName)
+                    CreateEntryField(label: "Username", text: $userName)
                     
-                    createEntryField(label: "Email", text:
+                    CreateEntryField(label: "Email", text:
                         $email)
-
-                    createEntryField(label: "Password", text: $password)
-
+                    
+                    CreateSecureField(text: "Password", inputText: $password)
                     
                     Button("Register") {
                         userSession.signUpWithEmail()
