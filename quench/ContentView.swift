@@ -114,10 +114,11 @@ struct CreateSecureField: View {
 }
 
 class UserSession {
-    var email = ""
     var password = ""
     var firstName = ""
     var lastName = ""
+    var userName = ""
+    var email = ""
     
     func signInWithEmail() {
         Task {
@@ -127,6 +128,7 @@ class UserSession {
                 print(error.localizedDescription)
             }
         }
+        print(email)
     }
     
     func signUpWithEmail() {
@@ -137,6 +139,6 @@ class UserSession {
                 print(error.localizedDescription)
             }
         }
+        print("check :\(password)")
     }
-    
 }
