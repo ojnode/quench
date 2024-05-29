@@ -9,6 +9,7 @@ import SwiftData
 
 struct ContentView: View {
     @State var userSession = UserSession()
+    @State var loginResult = ""
     
     var body: some View {
         NavigationStack {
@@ -32,7 +33,11 @@ struct ContentView: View {
                         CreateSecureField(text: "Password", inputText: $userSession.password)
                         
                         Button("Sign In") {
-                            userSession.signInWithEmail()
+                            Task {
+                               let result = await userSession.signInWithEmail()
+                                loginResult = result
+                    
+                            }
                         }
                         .buttonStyle(AllButtonStyle())
                         Spacer()
@@ -47,7 +52,11 @@ struct ContentView: View {
                                     .cornerRadius(20)
                             }
                         }
-                        Spacer()
+                    
+                        
+                        CreateText(label: loginResult, size: 15, weight: .light)
+                        
+                        
                     }
                 }
             }
@@ -120,26 +129,22 @@ class UserSession {
     var userName = ""
     var email = ""
     
-    func signInWithEmail() {
-        Task {
+    func signInWithEmail() async -> String {
             do {
                try await AuthService.shared.signInEmail(email: email, password: password)
+                return "success"
             } catch {
-                print(error.localizedDescription)
+                return "incorrect login details"
             }
-        }
-        print(email)
     }
     
-    func signUpWithEmail() {
-        Task {
+    func signUpWithEmail() async -> String {
             do {
                try await AuthService.shared.registerEmail(email: email, password: password,
                                                           firstName: firstName, lastName: lastName)
+                return "success"
             } catch {
-                print(error.localizedDescription)
+                return "\(error.localizedDescription)"
             }
-        }
-        print("check :\(password)")
     }
 }
