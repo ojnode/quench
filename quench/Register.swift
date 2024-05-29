@@ -11,7 +11,6 @@ import SwiftData
 struct RegisterView: View {
     @State var userSession = UserSession()
 
-    
     var body: some View {
         ZStack {
             Color.black
@@ -38,7 +37,9 @@ struct RegisterView: View {
                                      secure: true)
                     
                     Button("Register") {
-                        userSession.signUpWithEmail()
+                        Task {
+                            let result = await userSession.signUpWithEmail()
+                        }
                     }
                     .buttonStyle(AllButtonStyle())
                     
