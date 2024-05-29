@@ -56,18 +56,28 @@ struct ContentView: View {
                         
                         CreateText(label: loginResult, size: 15, weight: .light)
                         
-                        
                     }
                 }
             }
         }
+        .onTapGesture {
+            hideKeyboard()
+        }
     }
+    
 }
 
 
 #Preview {
     ContentView()
         .modelContainer(for: Item.self, inMemory: true)
+}
+
+// cant be done without UIKIT
+func hideKeyboard() {
+    #if canImport(UIKit)
+    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    #endif
 }
 
 struct AllButtonStyle: ButtonStyle {

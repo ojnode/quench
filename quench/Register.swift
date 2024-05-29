@@ -57,6 +57,9 @@ struct RegisterView: View {
                 }
             }
         }
+        .onTapGesture {
+            hideKeyboard()
+        }
     }
 }
 
