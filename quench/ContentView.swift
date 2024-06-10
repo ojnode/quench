@@ -82,7 +82,7 @@ struct AllButtonStyle: ButtonStyle {
     configuration.label
       .padding()
       .foregroundColor(.black)
-      .background(configuration.isPressed ? Color.red : Color.blue)
+      .background(configuration.isPressed ? Color("button") : Color.blue)
       .cornerRadius(20.0)
   }
 }
