@@ -34,9 +34,9 @@ struct ContentView: View {
                         
                         Button("Sign In") {
                             Task {
-                               let result = await userSession.signInWithEmail()
+                                let result = await userSession.signInWithEmail()
                                 loginResult = result
-                    
+                                hideKeyboard()
                             }
                         }
                         .buttonStyle(AllButtonStyle())
@@ -44,7 +44,6 @@ struct ContentView: View {
                         
                         NavigationLink(destination: RegisterView().navigationBarBackButtonHidden(true)) {
                             HStack {
-                                
                                 Text("Register")
                                     .foregroundColor(.black)
                                     .padding()
@@ -52,10 +51,7 @@ struct ContentView: View {
                                     .cornerRadius(20)
                             }
                         }
-                    
-                        
                         CreateText(label: loginResult, size: 15, weight: .light)
-                        
                     }
                 }
             }

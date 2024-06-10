@@ -11,19 +11,13 @@ struct HomeView: View {
     
     var body: some View {
         ZStack {
-                NavigationLink(destination: SetGoal()) {
-                    Image(.homepage)
-                        .resizable()
-                        .aspectRatio(2, contentMode: .fit)
-                        .cornerRadius(25)
-                        .padding()
+               Stats()
                 }
                 
                 VStack (spacing:40) {
                     
-                    Spacer()
-                    
-                    Text("map")
+                Spacer()
+                
                     
                     Text("socials")
                     
@@ -33,9 +27,31 @@ struct HomeView: View {
                 }
         }
     }
-}
+
 
 #Preview {
     HomeView()
         .modelContainer(for: Item.self, inMemory: true)
+}
+
+struct Stats: View {
+    var setGoals: Bool = false
+    
+    var body: some View {
+        if !(setGoals) {
+            ZStack {
+                NavigationLink(destination: SetGoal()) {
+                    Image(.homepage)
+                        .resizable()
+                        .aspectRatio(2, contentMode: .fit)
+                        .cornerRadius(25)
+                        .padding()
+                }
+            }
+        } else {
+            Text("percentage reduced")
+            Text("percentage reduced")
+            Text("percentage reduced")
+        }
+    }
 }

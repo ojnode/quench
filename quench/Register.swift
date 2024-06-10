@@ -38,7 +38,7 @@ struct RegisterView: View {
                     
                     Button("Register") {
                         Task {
-                            let result = await userSession.signUpWithEmail()
+                            await userSession.signUpWithEmail()
                         }
                     }
                     .buttonStyle(AllButtonStyle())
