@@ -14,6 +14,7 @@ struct SetGoal: View {
     @State var weight = ""
     @State var height = ""
     @State var gender = ""
+    @State var reduction: Double = 0
     
     func valueValidation() throws -> (age: Int, weight: Double, height: Double) {
             guard let weight = Double(weight) else {
@@ -31,15 +32,30 @@ struct SetGoal: View {
     
     var body: some View {
         ZStack {
-            VStack (spacing: 40) {
+            Color.black
+                .ignoresSafeArea()
+            VStack (spacing:70) {
+                
+                CreateText(label: "Quench", size: 25)
+                
+                VStack (spacing: 30) {
                     
-                    CreateEntryField(label: "Age", text: $age)
-                
-                    CreateEntryField(label: "Weight", text: $weight)
-                
-                    CreateEntryField(label: "Height", text: $height)
-                
-                    CreateEntryField(label: "Gender", text: $gender)
+                    CreateEntryField(label: "Age:", text: $age)
+                    
+                    CreateEntryField(label: "Weight:", text: $weight)
+                    
+                    CreateEntryField(label: "Height:", text: $height)
+                    
+                    CreateEntryField(label: "Gender:", text: $gender)
+                    
+                    VStack {
+                        CreateText(label: "Percentage Reduction Goal", size: 18)
+                        Slider(value: $reduction, in:0...100)
+                        CreateText(label: String(format: "%.2f%%", reduction), size: 20)
+                    }
+                    
+                }
+                Spacer()
                 
                 Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
                     Text("Set Goal")
