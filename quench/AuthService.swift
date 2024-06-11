@@ -29,7 +29,6 @@ final class AuthService {
     func registerEmail(email: String, password: String, firstName: String, lastName: String) async throws {
         let displayName = "\(firstName) \(lastName)"
         let result = try await auth.createUser(withEmail: email, password: password)
-        print(result)
         currentUser = result.user
         let changeRequest = currentUser?.createProfileChangeRequest()
         changeRequest?.displayName = displayName
