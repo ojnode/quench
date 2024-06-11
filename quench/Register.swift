@@ -10,6 +10,7 @@ import SwiftData
 
 struct RegisterView: View {
     @State var userSession = UserSession()
+    @State var isRegistered = false
 
     var body: some View {
         ZStack {
@@ -38,8 +39,13 @@ struct RegisterView: View {
                     
                     Button("Register") {
                         Task {
+                            isRegistered = true
                             await userSession.signUpWithEmail()
                         }
+                        
+                    }
+                    .navigationDestination(isPresented: $isRegistered) {
+                        SuccessLogin()
                     }
                     .buttonStyle(AllButtonStyle())
                     
