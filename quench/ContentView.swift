@@ -36,6 +36,7 @@ struct ContentView: View {
                             Task {
                                 let result = await userSession.signInWithEmail()
                                 loginResult = result
+                                HomeView()
                                 hideKeyboard()
                             }
                         }
