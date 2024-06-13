@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State var signedOut: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -55,9 +56,12 @@ struct HomeView: View {
                         
                         Spacer()
                         
-                        Button(action: {AuthService.shared.signOut()}, label: {
+                        Button(action: {AuthService.shared.signOut(); signedOut = true}, label: {
                             Text("Sign out")
                         })
+                        .navigationDestination(isPresented: $signedOut) {
+                            ContentView()
+                        }
                         .buttonStyle(AllButtonStyle())
                     }
                     Spacer()
