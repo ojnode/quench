@@ -7,12 +7,30 @@
 
 import SwiftUI
 
-struct successLogin: View {
+struct SuccessLogin: View {
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack {
+            ZStack {
+                Color.black
+                    .ignoresSafeArea()
+                
+                VStack (spacing:30) {
+                    CreateText(label: "Registration successful", size: 25)
+                    NavigationLink(destination: ContentView()
+                        .navigationBarBackButtonHidden(true)) {
+                            CreateText(label: "Login", size: 30, color: .black)
+                    }
+                    .buttonStyle(AllButtonStyle())
+                
+                    Spacer()
+                }
+            }
+        }
     }
+   
 }
 
 #Preview {
-    successLogin()
+    SuccessLogin()
 }
