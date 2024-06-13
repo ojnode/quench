@@ -5,47 +5,29 @@
 //  Created by prince ojinnaka on 06/05/2024.
 //
 
-
 import SwiftUI
+import FirebaseAuth
+import FirebaseFirestore
 
 struct SetGoal: View {
-    
     @State var age = ""
     @State var weight = ""
     @State var height = ""
     @State var gender = ""
     @State var reduction: Double = 0
     
-    func valueValidation() throws -> (age: Int, weight: Double, height: Double) {
-            guard let weight = Double(weight) else {
-                throw valueError.weightError
-            }
-            guard let height = Double(height) else {
-                throw valueError.heightError
-            }
-            guard let age = Int(age) else {
-                throw valueError.ageError
-            }
-        
-        return (age, weight, height)
-    }
-    
     var body: some View {
         ZStack {
             Color.black
                 .ignoresSafeArea()
+            
             VStack (spacing:70) {
-                
                 CreateText(label: "Quench", size: 25)
                 
                 VStack (spacing: 30) {
-                    
                     CreateEntryField(label: "Age:", text: $age)
-                    
                     CreateEntryField(label: "Weight:", text: $weight)
-                    
                     CreateEntryField(label: "Height:", text: $height)
-                    
                     CreateEntryField(label: "Gender:", text: $gender)
                     
                     VStack {
@@ -57,11 +39,19 @@ struct SetGoal: View {
                 }
                 Spacer()
                 
-                Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
+                Button(action: {
+                    Task
+                    {await printUser(age: age, weight: weight, height: height, gender: gender).storeData()
+                        hideKeyboard()
+                    }
+                }, label: {
                     Text("Set Goal")
                 })
                 .buttonStyle(AllButtonStyle())
             }
+        }
+        .onTapGesture {
+            hideKeyboard()
         }
     }
 }
@@ -72,7 +62,6 @@ struct SetGoal: View {
 }
 
 struct CreateEntryField: View {
-    
     var label: String
     var text: Binding<String>
     var secure: Bool = false
@@ -89,9 +78,27 @@ struct CreateEntryField: View {
     }
 }
 
-
-enum valueError: Error {
-    case weightError
-    case heightError
-    case ageError
+struct printUser  {
+    let db = Firestore.firestore()
+    let user = Auth.auth().currentUser
+    var age: String
+    var weight: String
+    var height: String
+    var gender: String
+    
+    
+    
+    func storeData() async {
+        //for updating data, it should take to another page, then when its in that page it uses the user.ID to get the key and change data. fix tomorrow.
+        
+        var data: [String: (String, String, String, String)] = ["\(user!.uid)": (age,weight,height,gender)]
+        
+        do {
+            let ref = try await db.collection("users").addDocument(data: data)
+            print("Document added with ID: \(ref.documentID)")
+        } catch {
+            print("Error adding document: \(error)")
+        }
+    }
 }
+
