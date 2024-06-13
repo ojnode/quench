@@ -34,7 +34,7 @@ struct ContentView: View {
                         
                         Button("Sign In") {
                             Task {
-                                let result = await userSession.signInWithEmail()
+                                let result = try await userSession.signInWithEmail()
                                 HomeView()
                                 loginResult = result
                                 hideKeyboard()
@@ -129,14 +129,14 @@ struct CreateSecureField: View {
     }
 }
 
-class UserSession {
+struct UserSession {
     var password = ""
     var firstName = ""
     var lastName = ""
     var userName = ""
     var email = ""
     
-    func signInWithEmail() async -> String {
+    func signInWithEmail() async throws -> String {
             do {
                try await AuthService.shared.signInEmail(email: email, password: password)
                 return "success"
@@ -145,13 +145,13 @@ class UserSession {
             }
     }
     
-    func signUpWithEmail() async -> String {
+    func signUpWithEmail() async -> Bool {
             do {
                try await AuthService.shared.registerEmail(email: email, password: password,
                                                           firstName: firstName, lastName: lastName)
-                return "success"
+                return true
             } catch {
-                return "\(error.localizedDescription)"
+                return false
             }
     }
 }
