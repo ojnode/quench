@@ -6,73 +6,67 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct RegisterView: View {
     @State var userSession = UserSession()
-    @State var isRegistered = false
-    
+    @State var isRegistered = (false, "")
+
     var body: some View {
         NavigationStack {
             ZStack {
                 Color.black
                     .ignoresSafeArea()
-                
-                VStack (spacing: 20) {
+
+                VStack(spacing: 20) {
                     Text("Quench")
-                        .font(.system(size:40, weight: .medium))
-                        .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                        .font(.system(size: 40, weight: .medium))
+                        .foregroundColor(.blue)
                     Spacer()
-                    
-                    VStack (spacing:50) {
-                        
+
+                    VStack(spacing: 40) {
                         CreateEntryField(label: "First Name", text: $userSession.firstName)
-                        
                         CreateEntryField(label: "Last Name", text: $userSession.lastName)
-                        
                         CreateEntryField(label: "Username", text: $userSession.userName)
-                        
-                        CreateEntryField(label: "Email", text:
-                                            $userSession.email)
-                        
-                        CreateEntryField(label: "Password", text: $userSession.password,
-                                         secure: true)
-                        
-                        
-                        Button("Register") {
-                            successfulRegister(userSession: <#T##UserSession#>)
+                        CreateEntryField(label: "Email", text: $userSession.email)
+                        CreateEntryField(label: "Password", text: $userSession.password, secure: true)
+
+                        Button(action: {
+                            Task {
+                                isRegistered = await userSession.signUpWithEmail()
+                                hideKeyboard()
+                            }
+                        }) {
+                                Text("Register")
                         }
-                        NavigationLink("Success", destination: SuccessLogin(), isActive: $isRegistered)
+                        .navigationDestination(isPresented: $isRegistered.0) {
+                            SuccessLogin()
+                        }
+                        .buttonStyle(AllButtonStyle())
                         
-                        //                        .buttonStyle(AllButtonStyle())
                         
+                        if !(isRegistered.0) {
+                            CreateText(label: "\(isRegistered.1)", size: 15, weight: .light, color: .red)
+                        }
+                        
+
                         HStack {
                             Text("Already have an account?")
-                                .font(.system(size:20, weight: .medium))
-                                .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                            
+                                .font(.system(size: 20, weight: .medium))
+                                .foregroundColor(.blue)
+
                             NavigationLink(destination: ContentView().navigationBarBackButtonHidden(true)) {
                                 Text("Login")
-                                    .font(.system(size:20, weight: .medium))
-                                    .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                                    .font(.system(size: 20, weight: .medium))
+                                    .foregroundColor(.blue)
                             }
                         }
                     }
                 }
-            }
-            .onTapGesture {
-                hideKeyboard()
+                .padding()
             }
         }
-    }
-    func successfulRegister(userSession: UserSession) {
-        Task {
-            do {
-                try await userSession.signUpWithEmail()
-                isRegistered = true
-            } catch {
-                print("not successful")
-            }
+        .onTapGesture {
+            hideKeyboard()
         }
     }
 }
@@ -81,5 +75,3 @@ struct RegisterView: View {
     RegisterView()
         .modelContainer(for: Item.self, inMemory: true)
 }
-
-
