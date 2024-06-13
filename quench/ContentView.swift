@@ -5,11 +5,10 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct ContentView: View {
     @State var userSession = UserSession()
-    @State var loginResult = ""
+    @State var sessionResult = (false, "")
     
     var body: some View {
         NavigationStack {
@@ -18,27 +17,25 @@ struct ContentView: View {
                     .ignoresSafeArea()
                 
                 VStack (spacing:40) {
-                    
                     VStack {
                         CreateText(label: "Quench", size: 70, weight: .medium)
-                        
                         CreateText(label: "One day at a time", size: 20, design: .serif)
                     }
                     Spacer()
                     
                     VStack (spacing:10) {
-                        
                         CreateTextField(text: "Enter your username or email", inputText: $userSession.email)
-                        
                         CreateSecureField(text: "Password", inputText: $userSession.password)
                         
                         Button("Sign In") {
                             Task {
-                                let result = try await userSession.signInWithEmail()
-                                HomeView()
-                                loginResult = result
+                                sessionResult = await userSession.signInWithEmail()
                                 hideKeyboard()
                             }
+                            
+                        }
+                        .navigationDestination(isPresented: $sessionResult.0) {
+                            HomeView()
                         }
                         .buttonStyle(AllButtonStyle())
                         Spacer()
@@ -52,7 +49,9 @@ struct ContentView: View {
                                     .cornerRadius(20)
                             }
                         }
-                        CreateText(label: loginResult, size: 15, weight: .light)
+                        if !(sessionResult.0) {
+                            CreateText(label: "\(sessionResult.1)", size: 15, weight: .light, color: .red)
+                        }
                     }
                 }
             }
@@ -89,7 +88,6 @@ struct AllButtonStyle: ButtonStyle {
 }
 
 struct CreateText: View {
-    
     var label: String
     var size: Double
     var weight: Font.Weight = .light
@@ -104,7 +102,6 @@ struct CreateText: View {
 }
 
 struct CreateTextField: View {
-    
     var text: String
     var inputText: Binding<String>
     
@@ -117,7 +114,6 @@ struct CreateTextField: View {
 }
 
 struct CreateSecureField: View {
-    
     var text: String
     var inputText: Binding<String>
     
@@ -136,22 +132,22 @@ struct UserSession {
     var userName = ""
     var email = ""
     
-    func signInWithEmail() async throws -> String {
+    func signInWithEmail() async -> (Bool, String) {
             do {
                try await AuthService.shared.signInEmail(email: email, password: password)
-                return "success"
+                return (true, "")
             } catch {
-                return "incorrect login details"
+                return (false, "\(error.localizedDescription)")
             }
     }
     
-    func signUpWithEmail() async -> Bool {
+    func signUpWithEmail() async -> (Bool, String) {
             do {
                try await AuthService.shared.registerEmail(email: email, password: password,
                                                           firstName: firstName, lastName: lastName)
-                return true
+                return (true, "")
             } catch {
-                return false
+                return (false, "\(error.localizedDescription)")
             }
     }
 }
