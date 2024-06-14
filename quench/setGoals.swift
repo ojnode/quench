@@ -41,7 +41,8 @@ struct SetGoal: View {
                 
                 Button(action: {
                     Task
-                    {await printUser(age: age, weight: weight, height: height, gender: gender).storeData()
+                    {await storeAttributes(age: age, weight: weight,
+                                           height: height, gender: gender).storeData()
                         hideKeyboard()
                     }
                 }, label: {
@@ -78,27 +79,52 @@ struct CreateEntryField: View {
     }
 }
 
-struct printUser  {
-    let db = Firestore.firestore()
-    let user = Auth.auth().currentUser
+struct storeAttributes  {
     var age: String
     var weight: String
     var height: String
     var gender: String
     
-    
-    
     func storeData() async {
-        //for updating data, it should take to another page, then when its in that page it uses the user.ID to get the key and change data. fix tomorrow.
+        //catch all errors for value and show at once later
         
-        var data: [String: (String, String, String, String)] = ["\(user!.uid)": (age,weight,height,gender)]
+        var data: [String: String] = ["age": age, "weight": weight, "height": height, "gender": gender]
         
         do {
-            let ref = try await db.collection("users").addDocument(data: data)
-            print("Document added with ID: \(ref.documentID)")
+            for (key, value) in data {
+                if key != "gender" {
+                    try await valueValidation(input: key)
+                }
+            }
+            try await createDatabase(data: data)
+        }
+        catch let error as storageValidation {
+                print("\(error)")
         } catch {
-            print("Error adding document: \(error)")
+            print("unkown")
         }
     }
 }
 
+enum storageValidation: Error {
+    case errorAddingDocument(String)
+    case incorrectValue(String)
+}
+
+func createDatabase(data: [String: String]) async throws {
+    let db = Firestore.firestore()
+    let user = Auth.auth().currentUser
+    
+    do {
+        try await db.collection("users").document((user!.uid)).setData(data)
+    } catch {
+            throw storageValidation.errorAddingDocument("Something went wrong")
+        }
+}
+
+func valueValidation (input: String) async throws -> Double {
+    guard let doublevalue = Double(input) else {
+        throw storageValidation.incorrectValue("invalid \(input) input")
+    }
+    return doublevalue
+}
