@@ -93,7 +93,7 @@ struct storeAttributes  {
         do {
             for (key, value) in data {
                 if key != "gender" {
-                    try await valueValidation(input: key)
+                    try await valueValidation(key: key, value: value)
                 }
             }
             try await createDatabase(data: data)
@@ -122,9 +122,9 @@ func createDatabase(data: [String: String]) async throws {
         }
 }
 
-func valueValidation (input: String) async throws -> Double {
-    guard let doublevalue = Double(input) else {
-        throw storageValidation.incorrectValue("invalid \(input) input")
+func valueValidation (key: String, value: String) async throws -> Double {
+    guard let doublevalue = Double(value) else {
+        throw storageValidation.incorrectValue("invalid \(key) input")
     }
     return doublevalue
 }
