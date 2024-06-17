@@ -15,6 +15,7 @@ struct SetGoal: View {
     @State var height = ""
     @State var gender = ""
     @State var reduction: Double = 0
+    @State var errors = [String]()
     
     var body: some View {
         ZStack {
@@ -39,9 +40,15 @@ struct SetGoal: View {
                 }
                 Spacer()
                 
+                VStack(spacing: 5) {
+                    ForEach(errors, id: \.self) { errorMessage in
+                        CreateText(label: errorMessage, size: 15, color: .red)
+                    }
+                }
+                
                 Button(action: {
                     Task
-                    {await storeAttributes(age: age, weight: weight,
+                    {await errors = storeAttributes(age: age, weight: weight,
                                            height: height, gender: gender).storeData()
                         hideKeyboard()
                     }
@@ -85,26 +92,42 @@ struct storeAttributes  {
     var height: String
     var gender: String
     
-    func storeData() async {
-        //catch all errors for value and show at once later
-        
+    func storeData() async -> [String] {
+        var errorList = [String]()
         var data: [String: String] = ["age": age, "weight": weight, "height": height, "gender": gender]
         
-        do {
-            for (key, value) in data {
+        for (key, value) in data {
+            do {
                 if key != "gender" {
                     try await valueValidation(key: key, value: value)
                 }
+            } catch let error as storageValidation {
+                if case let .incorrectValue(string) = error {
+                    errorList.append(string)
+                }
+            } catch {
+                let message = "Something went wrong"
+                errorList.append(message)
             }
-            try await createDatabase(data: data)
         }
-        catch let error as storageValidation {
-                print("\(error)")
-        } catch {
-            print("unkown")
+        
+        if errorList.isEmpty {
+            do {
+                try await createDatabase(data: data)
+            } catch let error as storageValidation {
+                if case let .errorAddingDocument(string) = error {
+                    errorList.append(string)
+                }
+            } catch {
+                errorList.append("Something went wrong")
+            }
+        } else {
+                return errorList
+            }
+        return errorList
         }
-    }
 }
+
 
 enum storageValidation: Error {
     case errorAddingDocument(String)
