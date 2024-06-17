@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import FirebaseAuth
+import FirebaseFirestore
 
 struct HomeView: View {
     @State var signedOut: Bool = false
@@ -65,8 +67,6 @@ struct HomeView: View {
                         .buttonStyle(AllButtonStyle())
                     }
                     Spacer()
-                
-                    
                 }
             }
         }
@@ -79,10 +79,11 @@ struct HomeView: View {
 }
 
 struct Stats: View {
-    var setGoals: Bool = false
-    
+    @State var isGoalSet: Bool? = nil
+
+    // check set Goal tomorrow , you can throw error again without do catch  check!!!!!!!!!
     var body: some View {
-        if !(setGoals) {
+        if !isGoalSet! {
             ZStack {
                 NavigationLink(destination: SetGoal()) {
                     Image(.homepage)
@@ -99,4 +100,23 @@ struct Stats: View {
             Text("percentage reduced")
         }
     }
+    
+    func checkGoalSet() async throws {
+        let db = Firestore.firestore().collection("users")
+        let user = Auth.auth().currentUser
+        
+        let document = try await db.document("\(user!.uid)").getDocument()
+        isGoalSet = document.exists
+    }
+
 }
+
+
+//func getGoalsetStatus() -> Bool {
+//    do {
+//        checkGoalSet()
+//    }
+//    catch {
+//        
+//    }
+//}
