@@ -49,7 +49,7 @@ struct SetGoal: View {
                 Button(action: {
                     Task
                     {await errors = storeAttributes(age: age, weight: weight,
-                                           height: height, gender: gender).storeData()
+                                           height: height, gender: gender, reduction: reduction).storeData()
                         hideKeyboard()
                     }
                 }, label: {
@@ -91,10 +91,13 @@ struct storeAttributes  {
     var weight: String
     var height: String
     var gender: String
+    var reduction: Double
     
     func storeData() async -> [String] {
         var errorList = [String]()
-        var data: [String: String] = ["age": age, "weight": weight, "height": height, "gender": gender]
+        var stringReduction = String(format:"%.2f%", reduction)
+        var data: [String: String] = ["age": age, "weight": weight,
+                                      "height": height, "gender": gender, "reduction": stringReduction]
         
         for (key, value) in data {
             do {
@@ -106,8 +109,7 @@ struct storeAttributes  {
                     errorList.append(string)
                 }
             } catch {
-                let message = "Something went wrong"
-                errorList.append(message)
+                errorList.append("Something went wrong")
             }
         }
         
