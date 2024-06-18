@@ -106,7 +106,6 @@ struct Stats: View {
         .onAppear {
             Task {
                 isGoalSet = await checkGoalSet()
-                print(isGoalSet)
             }
         }
     }
@@ -115,9 +114,12 @@ struct Stats: View {
         let db = Firestore.firestore().collection("users")
         let user = Auth.auth().currentUser
         
+        guard let user = user?.uid else {
+            return false
+        }
         
         do {
-            let document = try await db.document("\(user!.uid)").getDocument()
+            let document = try await db.document("\(user)").getDocument()
             return document.exists
         } catch {
             return false
