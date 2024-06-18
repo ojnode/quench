@@ -11,7 +11,6 @@ import FirebaseFirestore
 
 struct HomeView: View {
     @State var signedOut: Bool = false
-    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -23,9 +22,11 @@ struct HomeView: View {
                         CreateText(label: "Quench", size: 25)
                     }
                     
+                    
+                    Stats()
+                    
                     VStack(spacing:25) {
-                        Stats()
-                        
+                                                
                         NavigationLink(destination: GoogleMapsView()) {
                             VStack (spacing:25) {
                                 Image(systemName: "map.circle")
@@ -79,44 +80,47 @@ struct HomeView: View {
 }
 
 struct Stats: View {
-    @State var isGoalSet: Bool? = nil
-
+    @State var isGoalSet: Bool = false
+    
     // check set Goal tomorrow , you can throw error again without do catch  check!!!!!!!!!
+    
     var body: some View {
-        if !isGoalSet! {
-            ZStack {
-                NavigationLink(destination: SetGoal()) {
-                    Image(.homepage)
-                        .resizable()
-                        .aspectRatio(2, contentMode: .fit)
-                        .cornerRadius(20)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-
+        Group {
+            if !isGoalSet {
+                ZStack {
+                    NavigationLink(destination: SetGoal()) {
+                        Image(.homepage)
+                            .resizable()
+                            .aspectRatio(2, contentMode: .fit)
+                            .cornerRadius(20)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        
+                    }
                 }
+            } else {
+                Text("percentage reduced")
+                Text("percentage reduced")
+                Text("percentage reduced")
             }
-        } else {
-            Text("percentage reduced")
-            Text("percentage reduced")
-            Text("percentage reduced")
+        }
+        .onAppear {
+            Task {
+                isGoalSet = await checkGoalSet()
+                print(isGoalSet)
+            }
         }
     }
     
-    func checkGoalSet() async throws {
+    func checkGoalSet() async -> Bool {
         let db = Firestore.firestore().collection("users")
         let user = Auth.auth().currentUser
         
-        let document = try await db.document("\(user!.uid)").getDocument()
-        isGoalSet = document.exists
+        
+        do {
+            let document = try await db.document("\(user!.uid)").getDocument()
+            return document.exists
+        } catch {
+            return false
+        }
     }
-
 }
-
-
-//func getGoalsetStatus() -> Bool {
-//    do {
-//        checkGoalSet()
-//    }
-//    catch {
-//        
-//    }
-//}
