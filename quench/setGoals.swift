@@ -22,8 +22,9 @@ struct SetGoal: View {
             Color.black
                 .ignoresSafeArea()
             
-            VStack (spacing:70) {
+            VStack (spacing:20) {
                 CreateText(label: "Quench", size: 25)
+                Spacer()
                 
                 VStack (spacing: 30) {
                     CreateEntryField(label: "Age:", text: $age)
@@ -95,8 +96,8 @@ struct storeAttributes  {
     
     func storeData() async -> [String] {
         var errorList = [String]()
-        var stringReduction = String(format:"%.2f%", reduction)
-        var data: [String: String] = ["age": age, "weight": weight,
+        let stringReduction = String(format:"%.2f%", reduction)
+        let data: [String: String] = ["age": age, "weight": weight,
                                       "height": height, "gender": gender, "reduction": stringReduction]
         
         for (key, value) in data {
@@ -139,12 +140,8 @@ enum storageValidation: Error {
 func createDatabase(data: [String: String]) async throws {
     let db = Firestore.firestore()
     let user = Auth.auth().currentUser
-    
-    do {
-        try await db.collection("users").document((user!.uid)).setData(data)
-    } catch {
-            throw storageValidation.errorAddingDocument("Something went wrong")
-        }
+    try await db.collection("users").document((user!.uid)).setData(data)
+
 }
 
 func valueValidation (key: String, value: String) async throws -> Double {
