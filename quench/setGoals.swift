@@ -151,7 +151,7 @@ func valueValidation(key: String, value: String) async throws -> Double {
         throw storageValidation.incorrectValue("invalid \(key) input")
     }
     
-    if doublevalue < 1 {
+    if doublevalue < 0 {
         throw storageValidation.incorrectValue("invalid \(key) input")
     }
     
