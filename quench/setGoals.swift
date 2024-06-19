@@ -9,6 +9,9 @@ import SwiftUI
 import FirebaseAuth
 import FirebaseFirestore
 
+
+// use a calculator for age later
+
 struct SetGoal: View {
     @State var age = ""
     @State var weight = ""
@@ -141,12 +144,16 @@ func createDatabase(data: [String: String]) async throws {
     let db = Firestore.firestore()
     let user = Auth.auth().currentUser
     try await db.collection("users").document((user!.uid)).setData(data)
-
 }
 
-func valueValidation (key: String, value: String) async throws -> Double {
+func valueValidation(key: String, value: String) async throws -> Double {
     guard let doublevalue = Double(value) else {
         throw storageValidation.incorrectValue("invalid \(key) input")
     }
+    
+    if doublevalue < 1 {
+        throw storageValidation.incorrectValue("invalid \(key) input")
+    }
+    
     return doublevalue
 }
