@@ -6,9 +6,6 @@
 //
 
 import SwiftUI
-import FirebaseAuth
-import FirebaseFirestore
-
 
 // use a calculator for age later
 
@@ -142,8 +139,8 @@ enum storageValidation: Error {
 
 func createDatabase(data: [String: String]) async throws {
     let db = firebaseStoreUser().db
-    let user = firebaseStoreUser().user
-    try await db.document((user!.uid)).setData(data)
+    let user = try firebaseStoreUser().getUserID()
+    try await db.document(user).setData(data)
 }
 
 func valueValidation(key: String, value: String) async throws -> Double {
