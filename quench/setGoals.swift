@@ -141,9 +141,9 @@ enum storageValidation: Error {
 }
 
 func createDatabase(data: [String: String]) async throws {
-    let db = Firestore.firestore()
-    let user = Auth.auth().currentUser
-    try await db.collection("users").document((user!.uid)).setData(data)
+    let db = firebaseStoreUser().db
+    let user = firebaseStoreUser().user
+    try await db.document((user!.uid)).setData(data)
 }
 
 func valueValidation(key: String, value: String) async throws -> Double {
