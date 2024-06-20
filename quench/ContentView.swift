@@ -8,7 +8,8 @@ import SwiftUI
 
 struct ContentView: View {
     @State var userSession = UserSession()
-    @State var sessionResult = (false, "")
+    @State var logSuccessful: Bool = false
+    @State var logError: String = ""
     
     var body: some View {
         NavigationStack {
@@ -28,13 +29,19 @@ struct ContentView: View {
                         CreateSecureField(text: "Password", inputText: $userSession.password)
                         
                         Button("Sign In") {
-                            Task {
-                                sessionResult = await userSession.signInWithEmail()
+                            Task { do {
+                                logSuccessful = try await userSession.signInWithEmail()
                                 hideKeyboard()
+                            } catch let error as LogStatusError {
+                                if case let .authorizationDenied(string) = error {
+                                    logError = string
+                                    logSuccessful = false
+                                    }
+                                }
                             }
                             
                         }
-                        .navigationDestination(isPresented: $sessionResult.0) {
+                        .navigationDestination(isPresented: $logSuccessful) {
                             HomeView()
                         }
                         .buttonStyle(AllButtonStyle())
@@ -49,8 +56,8 @@ struct ContentView: View {
                                     .cornerRadius(20)
                             }
                         }
-                        if !(sessionResult.0) {
-                            CreateText(label: "\(sessionResult.1)", size: 15, weight: .light, color: .red)
+                        if !(logSuccessful) {
+                            CreateText(label: "\(logError)", size: 15, weight: .light, color: .red)
                         }
                     }
                 }
@@ -132,22 +139,27 @@ struct UserSession {
     var userName = ""
     var email = ""
     
-    func signInWithEmail() async -> (Bool, String) {
+    func signInWithEmail() async throws -> Bool {
             do {
                try await AuthService.shared.signInEmail(email: email, password: password)
-                return (true, "")
+                return true
             } catch {
-                return (false, "\(error.localizedDescription)")
+                throw LogStatusError.authorizationDenied("\(error.localizedDescription)")
             }
     }
     
-    func signUpWithEmail() async -> (Bool, String) {
+    func signUpWithEmail() async throws -> Bool {
             do {
                try await AuthService.shared.registerEmail(email: email, password: password,
                                                           firstName: firstName, lastName: lastName)
-                return (true, "")
+                return true
             } catch {
-                return (false, "\(error.localizedDescription)")
+                throw LogStatusError.authorizationDenied("\(error.localizedDescription)")
             }
     }
 }
+
+enum LogStatusError: Error {
+    case authorizationDenied(String)
+}
+
