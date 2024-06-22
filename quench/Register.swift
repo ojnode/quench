@@ -9,7 +9,8 @@ import SwiftUI
 
 struct RegisterView: View {
     @State var userSession = UserSession()
-    @State var isRegistered = (false, "")
+    @State var isRegistered = false
+    @State var logError: String = ""
 
     var body: some View {
         NavigationStack {
@@ -24,31 +25,43 @@ struct RegisterView: View {
                     Spacer()
 
                     VStack(spacing: 40) {
-                        CreateEntryField(label: "First Name", text: $userSession.firstName)
-                        CreateEntryField(label: "Last Name", text: $userSession.lastName)
-                        CreateEntryField(label: "Username", text: $userSession.userName)
-                        CreateEntryField(label: "Email", text: $userSession.email)
-                        CreateEntryField(label: "Password", text: $userSession.password, secure: true)
+                        CreateEntryField(label: "First Name", 
+                                         text: $userSession.firstName)
+                        CreateEntryField(label: "Last Name", 
+                                         text: $userSession.lastName)
+                        CreateEntryField(label: "Username", 
+                                         text: $userSession.userName)
+                        CreateEntryField(label: "Email", 
+                                         text: $userSession.email)
+                        CreateEntryField(label: "Password",
+                                         text: $userSession.password, secure: true)
 
                         Button(action: {
-                            Task {
-                                isRegistered = await userSession.signUpWithEmail()
+                            Task {  
+                                do
+                                    {
+                                isRegistered = try await userSession.signUpWithEmail()
                                 hideKeyboard()
+                            } catch let error as LogStatusError {
+                                if case let .authorizationDenied(string) = error {
+                                    isRegistered = false
+                                    logError = string
+                                    }
+                                }
                             }
                         }) {
                                 Text("Register")
                         }
-                        .navigationDestination(isPresented: $isRegistered.0) {
+                        .navigationDestination(isPresented: $isRegistered) {
                             SuccessLogin()
                         }
                         .buttonStyle(AllButtonStyle())
                         
                         
-                        if !(isRegistered.0) {
-                            CreateText(label: "\(isRegistered.1)", size: 15, weight: .light, color: .red)
+                        if !isRegistered {
+                            CreateText(label: "\(logError)", size: 15, weight: .light, color: .red)
                         }
                         
-
                         HStack {
                             Text("Already have an account?")
                                 .font(.system(size: 20, weight: .medium))
