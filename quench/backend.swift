@@ -34,9 +34,9 @@ class CalculateBMI {
     
     let doc = firebaseStoreUser()
     var attributesList: [String: Any] = [:]
-    var BMI: Double = 0
+    var BMIResults: Double = 0
     
-    func getBMI() async throws {
+    func setBMI() async throws {
         guard let attributes = try await doc.getData()
         else {
             throw RetrieveDataErrors.attributesError
@@ -47,58 +47,38 @@ class CalculateBMI {
             }
         }
         
-        // First, unwrap the Any type
-        guard let weightUnwrapped = attributesList["weight"] as? Any,
-              let heightUnwrapped = attributesList["height"] as? Any else {
-            throw RetrieveDataErrors.attributesError
-        }
-
-        // Then, try to convert to Double
-        let weight: Double
-        let height: Double
-
-        if let weightDouble = weightUnwrapped as? Double {
-            weight = weightDouble
-        } else if let weightString = weightUnwrapped as? String,
-                  let weightDouble = Double(weightString) {
-            weight = weightDouble
-        } else {
+        guard let unwrappedHeight = attributesList["height"] as? Any,
+              let unwrappedWeight = attributesList["weight"] as? Any else {
             throw RetrieveDataErrors.attributesError
         }
         
-        if let heightDouble = heightUnwrapped as? Double {
-            height = heightDouble
-        } else if let heightString = heightUnwrapped as? String,
-                  let heightDouble = Double(heightString) {
-            height = heightDouble
-        } else {
+        guard let stringHeight = unwrappedHeight as? String,
+              let stringWeight = unwrappedWeight as? String else {
             throw RetrieveDataErrors.attributesError
         }
         
-        print("\(weight / height)")
-//        guard let weight = attributesList["weight"]  as? Double,
-//              let height = attributesList["height"]  as? Double else {
-//            throw RetrieveDataErrors.attributesError
-//        }
-
-//    print("is it working 3")
-//    print(attributesList)
-//    let weight = attributesList["weight"] as? Double
-//    let height = attributesList["height"] as? Double
-//    let BMI = weight! / height! * 2
-//    return BMI
-}
+        let wrappedHeight = Double(stringHeight)
+        let wrappedWeight = Double(stringWeight)
+        
+        guard let height = wrappedHeight as? Double,
+              let weight = wrappedWeight as? Double
+        else {
+            throw RetrieveDataErrors.attributesError
+        }
+        BMIResults = weight / height
+    }
 }
 
 func printBMI() async {
     let BMI = CalculateBMI()
     
     do {
-        let BMIResults = try await BMI.getBMI()
+        try await BMI.setBMI()
     } catch {
         print("e no work")
     }
-    
+    print(BMI.BMIResults)
+
 }
 
 enum RetrieveDataErrors: Error {
