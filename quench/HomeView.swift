@@ -6,11 +6,11 @@
 //
 
 import SwiftUI
-import FirebaseAuth
-import FirebaseFirestore
 
 struct HomeView: View {
     @State var signedOut: Bool = false
+    @State var checkAttributesSet: Bool = false
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -21,9 +21,10 @@ struct HomeView: View {
                     VStack {
                         CreateText(label: "Quench", size: 25)
                     }
-                    
-                    
-                    Stats()
+                    .task {
+                        checkAttributesSet = await firebaseStoreUser().checkattributesSet()
+                    }
+                    DisplayOption(isGoalSet: checkAttributesSet)
                     
                     VStack(spacing:25) {
                                                 
@@ -79,50 +80,20 @@ struct HomeView: View {
         .modelContainer(for: Item.self, inMemory: true)
 }
 
-struct Stats: View {
-    @State var isGoalSet: Bool = false
+struct DisplayOption: View {
+    var isGoalSet: Bool
     
-    // check set Goal tomorrow , you can throw error again without do catch  check!!!!!!!!!
-    
-    var body: some View {
-        Group {
-            if !isGoalSet {
-                ZStack {
-                    NavigationLink(destination: SetGoal()) {
-                        Image(.homepage)
-                            .resizable()
-                            .aspectRatio(2, contentMode: .fit)
-                            .cornerRadius(20)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        
-                    }
-                }
-            } else {
-                Text("percentage reduced")
-                Text("percentage reduced")
-                Text("percentage reduced")
-            }
-        }
-        .onAppear {
-            Task {
-                isGoalSet = await checkGoalSet()
-            }
-        }
+    var image: String {
+        get {isGoalSet ? "Progress" : "Homepage"}
     }
     
-    func checkGoalSet() async -> Bool {
-        let db = Firestore.firestore().collection("users")
-        let user = Auth.auth().currentUser
-        
-        guard let user = user?.uid else {
-            return false
-        }
-        
-        do {
-            let document = try await db.document("\(user)").getDocument()
-            return document.exists
-        } catch {
-            return false
+    var destination: AnyView {
+        get {isGoalSet ? AnyView(ProgressTracker()) : AnyView(SetGoal())}
+    }
+    
+    var body: some View {
+        NavigationLink (destination: destination) {
+            CreateImageView(image: image, width: 2, height: 1, radius: 40)
         }
     }
 }
