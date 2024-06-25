@@ -132,34 +132,19 @@ struct CreateSecureField: View {
     }
 }
 
-struct UserSession {
-    var password = ""
-    var firstName = ""
-    var lastName = ""
-    var userName = ""
-    var email = ""
-    
-    func signInWithEmail() async throws -> Bool {
-            do {
-               try await AuthService.shared.signInEmail(email: email, password: password)
-                return true
-            } catch {
-                throw LogStatusError.authorizationDenied("\(error.localizedDescription)")
-            }
-    }
-    
-    func signUpWithEmail() async throws -> Bool {
-            do {
-               try await AuthService.shared.registerEmail(email: email, password: password,
-                                                          firstName: firstName, lastName: lastName)
-                return true
-            } catch {
-                throw LogStatusError.authorizationDenied("\(error.localizedDescription)")
-            }
+struct CreateImageView: View {
+    var image: String
+    var width: Double
+    var height: Double
+    var radius: Double
+    var frameWidth: CGFloat?
+    var frameHeight: CGFloat?
+
+    var body: some View {
+        Image(image)
+            .resizable()
+            .aspectRatio(CGSize(width: width, height: height), contentMode: .fit)
+            .frame(width:frameWidth ?? nil, height: frameHeight ?? nil)
+            .cornerRadius(radius)
     }
 }
-
-enum LogStatusError: Error {
-    case authorizationDenied(String)
-}
-
