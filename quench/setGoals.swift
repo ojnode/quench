@@ -81,76 +81,10 @@ struct CreateEntryField: View {
             CreateText(label: label, size: 20, weight: .medium)
             if !(secure) {
                 CreateTextField(text: "Enter your \(label)", inputText: text)
-            } else { CreateSecureField(text: "Enter your \(label)", inputText: text)
+            } else { 
+                CreateSecureField(text: "Enter your \(label)", inputText: text)
             }
         }
     }
 }
 
-struct storeAttributes  {
-    var age: String
-    var weight: String
-    var height: String
-    var gender: String
-    var reduction: Double
-    
-    func storeData() async -> [String] {
-        var errorList = [String]()
-        let stringReduction = String(format:"%.2f%", reduction)
-        let data: [String: String] = ["age": age, "weight": weight,
-                                      "height": height, "gender": gender, "reduction": stringReduction]
-        
-        for (key, value) in data {
-            do {
-                if key != "gender" {
-                    try await valueValidation(key: key, value: value)
-                }
-            } catch let error as storageValidation {
-                if case let .incorrectValue(string) = error {
-                    errorList.append(string)
-                }
-            } catch {
-                errorList.append("Something went wrong")
-            }
-        }
-        
-        if errorList.isEmpty {
-            do {
-                try await createDatabase(data: data)
-            } catch let error as storageValidation {
-                if case let .errorAddingDocument(string) = error {
-                    errorList.append(string)
-                }
-            } catch {
-                errorList.append("Something went wrong")
-            }
-        } else {
-                return errorList
-            }
-        return errorList
-        }
-}
-
-
-enum storageValidation: Error {
-    case errorAddingDocument(String)
-    case incorrectValue(String)
-}
-
-func createDatabase(data: [String: String]) async throws {
-    let db = firebaseStoreUser().db
-    let user = try firebaseStoreUser().getUserID()
-    try await db.document(user).setData(data)
-}
-
-func valueValidation(key: String, value: String) async throws -> Double {
-    guard let doublevalue = Double(value) else {
-        throw storageValidation.incorrectValue("invalid \(key) input")
-    }
-    
-    if doublevalue < 0 {
-        throw storageValidation.incorrectValue("invalid \(key) input")
-    }
-    
-    return doublevalue
-}
