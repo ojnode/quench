@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @State var signedOut: Bool = false
-    @State var checkAttributesSet: Bool = false
+    @StateObject var firebaseInstance = FirebaseStoreUser()
     
     var body: some View {
         NavigationStack {
@@ -21,10 +21,8 @@ struct HomeView: View {
                     VStack {
                         CreateText(label: "Quench", size: 25)
                     }
-                    .task {
-                        checkAttributesSet = await firebaseStoreUser().checkattributesSet()
-                    }
-                    DisplayOption(isGoalSet: checkAttributesSet)
+                  
+                    DisplayOption(isGoalSet: firebaseInstance.getAttributesSet ?? false)
                     
                     VStack(spacing:25) {
                                                 
@@ -81,6 +79,7 @@ struct HomeView: View {
 }
 
 struct DisplayOption: View {
+    
     var isGoalSet: Bool
     
     var image: String {
@@ -92,8 +91,8 @@ struct DisplayOption: View {
     }
     
     var body: some View {
-        NavigationLink (destination: destination) {
-            CreateImageView(image: image, width: 2, height: 1, radius: 40)
+            NavigationLink (destination: destination) {
+                CreateImageView(image: image, width: 2, height: 1, radius: 40)
+            }
         }
-    }
 }
