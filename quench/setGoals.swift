@@ -16,18 +16,22 @@ struct SetGoal: View {
     @State var gender = ""
     @State var reduction: Double = 0
     @State var errors = [String]()
-    
+    @State var birthDate = Date.now
+
     var body: some View {
         ZStack {
-            Color.black
-                .ignoresSafeArea()
+//            Color.black
+//                .ignoresSafeArea()
             
             VStack (spacing:20) {
                 CreateText(label: "Quench", size: 25)
                 Spacer()
                 
+                // change color of text
                 VStack (spacing: 30) {
-                    CreateEntryField(label: "Age:", text: $age)
+                    DatePicker(selection: $birthDate, in: ...Date.now, displayedComponents: .date) {
+                        Text("Select a date ")
+                    }
                     CreateEntryField(label: "Weight:", text: $weight)
                     CreateEntryField(label: "Height:", text: $height)
                     CreateEntryField(label: "Gender:", text: $gender)
@@ -87,4 +91,3 @@ struct CreateEntryField: View {
         }
     }
 }
-
