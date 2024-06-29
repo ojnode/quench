@@ -20,18 +20,19 @@ struct SetGoal: View {
 
     var body: some View {
         ZStack {
-//            Color.black
-//                .ignoresSafeArea()
+            Color.black
+                .ignoresSafeArea()
             
             VStack (spacing:20) {
                 CreateText(label: "Quench", size: 25)
                 Spacer()
                 
-                // change color of text
                 VStack (spacing: 30) {
                     DatePicker(selection: $birthDate, in: ...Date.now, displayedComponents: .date) {
-                        Text("Select a date ")
+                        Text("Date of Birth")
+                            .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
                     }
+                    .accentColor(.blue)
                     CreateEntryField(label: "Weight:", text: $weight)
                     CreateEntryField(label: "Height:", text: $height)
                     CreateEntryField(label: "Gender:", text: $gender)
@@ -67,6 +68,9 @@ struct SetGoal: View {
             hideKeyboard()
         }
     }
+    func getbirthday() -> Date {
+        return birthDate
+    }
 }
 
 #Preview {
@@ -90,4 +94,8 @@ struct CreateEntryField: View {
             }
         }
     }
+}
+
+struct getAge: Observable {
+    let currentage = SetGoal().getbirthday()
 }
