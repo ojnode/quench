@@ -9,7 +9,7 @@ import FirebaseFirestore
 import FirebaseAuth
 
 struct storeAttributes  {
-    var age: String
+    var birthday: Date
     var weight: String
     var height: String
     var gender: String
@@ -18,7 +18,10 @@ struct storeAttributes  {
     func storeData() async -> [String] {
         var errorList = [String]()
         let stringReduction = String(format:"%.2f%", reduction)
-        let data: [String: String] = ["age": age, "weight": weight,
+        let age = Calendar.current.dateComponents([.year], from: birthday,
+                                                  to: Date())
+           .year
+        let data: [String: String] = ["age": String(age ?? 0), "weight": weight,
                                       "height": height, "gender": gender, "reduction": stringReduction]
         
         for (key, value) in data {
@@ -165,36 +168,34 @@ class CalculateBMI {
     }
     
     
-    func setBMI() async throws {
+    func setBMI() async throws ->  (String, Double, Double, String, Double) {
         guard let attributes = try await doc.getData()
         else {
             throw RetrieveDataErrors.attributesError
         }
+        
         for (key, value) in attributes {
-            if key == "weight" || key == "height" {
-                attributesList.updateValue(value, forKey: key)
-            }
+            attributesList.updateValue(value, forKey: key)
         }
-        
-        guard let unwrappedHeight = attributesList["height"] as? Any,
-              let unwrappedWeight = attributesList["weight"] as? Any else {
+
+        guard let stringHeight = attributesList["height"] as? String,
+              let stringGender = attributesList["gender"] as? String,
+              let stringAge = attributesList["age"] as? String,
+              let reduction = attributesList["reduction"] as? String,
+              let stringWeight = attributesList["weight"] as? String else {
             throw RetrieveDataErrors.attributesError
         }
         
-        guard let stringHeight = unwrappedHeight as? String,
-              let stringWeight = unwrappedWeight as? String else {
-            throw RetrieveDataErrors.attributesError
-        }
-        
-        let wrappedHeight = Double(stringHeight)
-        let wrappedWeight = Double(stringWeight)
-        
-        guard let height = wrappedHeight as? Double,
-              let weight = wrappedWeight as? Double
+        guard let height = Double(stringHeight),
+              let weight = Double(stringWeight),
+              let reduction = Double(reduction)
         else {
             throw RetrieveDataErrors.attributesError
         }
+        
         getResults = weight / height
+        
+        return (stringGender, weight, height, stringAge, reduction)
     }
 }
 
