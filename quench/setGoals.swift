@@ -10,7 +10,6 @@ import SwiftUI
 // use a calculator for age later
 
 struct SetGoal: View {
-    @State var age = ""
     @State var weight = ""
     @State var height = ""
     @State var gender = ""
@@ -54,7 +53,7 @@ struct SetGoal: View {
                 
                 Button(action: {
                     Task
-                    {await errors = storeAttributes(age: age, weight: weight,
+                    {await errors = storeAttributes(birthday: birthDate , weight: weight,
                                            height: height, gender: gender, reduction: reduction).storeData()
                         hideKeyboard()
                     }
@@ -67,9 +66,6 @@ struct SetGoal: View {
         .onTapGesture {
             hideKeyboard()
         }
-    }
-    func getbirthday() -> Date {
-        return birthDate
     }
 }
 
@@ -94,8 +90,4 @@ struct CreateEntryField: View {
             }
         }
     }
-}
-
-struct getAge: Observable {
-    let currentage = SetGoal().getbirthday()
 }
