@@ -9,51 +9,78 @@ import FirebaseFirestore
 import FirebaseAuth
 
 struct storeAttributes  {
-    var birthday: Date
-    var weight: String
-    var height: String
-    var gender: String
-    var reduction: Double
+    var userKey = ""
+    var userValue = ""
+    var firebase = FirebaseStoreUser()
     
-    func storeData() async -> [String] {
+    func storeData()  async -> [String] {
         var errorList = [String]()
-        let stringReduction = String(format:"%.2f%", reduction)
-        let age = Calendar.current.dateComponents([.year], from: birthday,
-                                                  to: Date())
-           .year
-        let data: [String: String] = ["age": String(age ?? 0), "weight": weight,
-                                      "height": height, "gender": gender, "reduction": stringReduction]
-        
-        for (key, value) in data {
-            do {
-                if key != "gender" {
-                    try await valueValidation(key: key, value: value)
-                }
-            } catch let error as storageValidation {
-                if case let .incorrectValue(string) = error {
-                    errorList.append(string)
-                }
-            } catch {
-                errorList.append("Something went wrong")
-            }
+        var userID = ""
+        do {
+            userID = try firebase.getUserID()
+        } catch {
+            errorList.append("Something went wrong")
         }
         
-        if errorList.isEmpty {
-            do {
-                try await createDatabase(data: data)
-            } catch let error as storageValidation {
-                if case let .errorAddingDocument(string) = error {
-                    errorList.append(string)
-                }
-            } catch {
-                errorList.append("Something went wrong")
+        let docRef = firebase.db.document(userID)
+        
+        do {
+            try await valueValidation(key: "\(userKey)", value: "\(userValue)")
+        } catch let error as storageValidation {
+            if case let .incorrectValue(string) = error {
+                errorList.append(string)
             }
-        } else {
-                return errorList
-            }
-        return errorList // remove later and implement optional
+        } catch {
+            errorList.append("Something went wrong")
+            return errorList
         }
+        
+        do {
+            try await docRef.updateData(["\(userKey)": "\(userValue)"])
+        } catch {
+            errorList.append(error.localizedDescription)
+            return errorList
+        }
+        return errorList
+    }
 }
+        
+//        do {
+//            try await createDatabase(data: ["height": height])
+//        } catch let error as storageValidation {
+//            if case let .errorAddingDocument(string) = error {
+//                errorList.append(string)
+//            }
+//        } catch {
+//            errorList.append("Something went wrong")
+//        }
+//        
+
+        
+        //        var errorList = [String]()
+        //        let stringReduction = String(format:"%.2f%", reduction)
+        //        let age = Calendar.current.dateComponents([.year], from: birthday,
+        //                                                  to: Date())
+        //           .year
+
+        //
+        //        for (key, value) in data {
+        //            do {
+        //                if key != "gender" {
+        //                    try await valueValidation(key: key, value: value)
+        //                }
+        //            } catch let error as storageValidation {
+        //                if case let .incorrectValue(string) = error {
+        //                    errorList.append(string)
+        //                }
+        //            } catch {
+        //                errorList.append("Something went wrong")
+        //            }
+        //        }
+        //
+
+        //        return errorList // remove later and implement optional
+        //        }
 
 enum storageValidation: Error {
     case errorAddingDocument(String)
@@ -141,18 +168,18 @@ class FirebaseStoreUser: ObservableObject {
    func setAttributesExist() async {
             do {
                 let user = try self.getUserID()
-                    let document = try await self.db.document("\(user)").getDocument()
+                let document = try await self.db.document("\(user)").getDocument()
                 self.getAttributesSet = document.exists
                 }
         catch {
             self.getAttributesSet = false
             }
         }
-    }
+}
 
 class CalculateBMI {
     
-    let doc = FirebaseStoreUser()
+    let firebase = FirebaseStoreUser()
     var attributesList: [String: Any] = [:]
     var getResults: Double = 0
     var errorReturn: String = ""
@@ -167,9 +194,8 @@ class CalculateBMI {
         }
     }
     
-    
     func setBMI() async throws ->  (String, Double, Double, String, Double) {
-        guard let attributes = try await doc.getData()
+        guard let attributes = try await firebase.getData()
         else {
             throw RetrieveDataErrors.attributesError
         }
