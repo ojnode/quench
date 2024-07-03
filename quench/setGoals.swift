@@ -8,99 +8,68 @@
 import SwiftUI
 
 struct SetGoal: View {
-    @State var age = ""
-    @State var weight = ""
-    @State var height = ""
-    @State var gender = ""
     @State var reduction: Double = 0
     @State var errors = [String]()
     @State var birthDate = Date.now
-    var BMIClass = CalculateBMI()
-    @State var shouldPresentSheet: editChoice? = nil
+    @State var shouldPresentSheet: EditChoice? = nil
+    @StateObject var BMIClass = AccessUserAttributes()
     
     var body: some View {
         ZStack {
             Color.black
                 .ignoresSafeArea()
             
-            VStack (spacing:50) {
+            VStack (spacing:30) {
                 VStack{
                     CreateText(label: "Quench", size: 25)
                 }
                 Spacer()
                 
-                VStack(spacing: 70) {
-                    HStack {
-                        CreateText(label: "Height: \(height)", size: 20, color: .black)
-                        Button(action: {shouldPresentSheet = .sheetA}, label: {
-                            Text("Edit")
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 40) // Adjust height of the button
-                                .foregroundColor(.black) // Text color
-                                .background(Color.blue) // Button background color
-                                .cornerRadius(10)
-                        })
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color.blue)
-                    .cornerRadius(20)
-                    
-                    HStack {
-                        CreateText(label: "Weight: \(weight)", size: 20, color: .black)
-                        Button("edit") {
-                            shouldPresentSheet = .sheetB
-                        }
-                        .buttonStyle(AllButtonStyle())
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color.blue)
-                    .cornerRadius(20)
-                    .buttonStyle(AllButtonStyle())
-                    
-                    HStack {
-                        CreateText(label: "Age: \(age)", size: 20, color: .black)
-                        Button("edit") {
-                            print("edit")
-                        }
-                        .buttonStyle(AllButtonStyle())
+                VStack(spacing:60) {
+                    ForEach(BMIClass.attributesKeys.indices, id: \.self) { index in
+                        let key = BMIClass.attributesKeys[index]
                         
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color.blue)
-                    .cornerRadius(20)
-                    .buttonStyle(AllButtonStyle())
-                    
-                    HStack {
-                        CreateText(label: "Reduction goal: \(String(reduction))", size: 20, color: .black)
-                        Button("edit") {
-                            print("huh")
+                        HStack {
+                            if let value = BMIClass.userAttributes[key] {
+                                CreateText(label: "\(key): \(value)", size: 20, color: .black)
+                            } else {
+                                CreateText(label: "\(key): not set", size: 20, color: .black)
+                            }
+                            Button(action: {shouldPresentSheet = EditChoice.allCases[index]}, label: {
+                                Text("Update")
+                                    .frame(width: 70, height: 30)
+                                    .foregroundColor(.blue)
+                                    .background(Color.black)
+                                    .cornerRadius(10)
+                            })
                         }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(Color.blue)
+                        .cornerRadius(20)
                         .buttonStyle(AllButtonStyle())
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color.blue)
-                    .cornerRadius(20)
-                    .buttonStyle(AllButtonStyle())
-                    
-                    Spacer()
+                }
+                Spacer()
+            }
+        
+            .sheet(item: $shouldPresentSheet) { sheet in
+                switch sheet {
+                case .sheetA:
+                    updateAttributeWindow(attribute: "\(BMIClass.attributesKeys[0])", shouldPresentSheet: $shouldPresentSheet)
+                case .sheetB:
+                    updateAttributeWindow(attribute: "\(BMIClass.attributesKeys[1])", shouldPresentSheet: $shouldPresentSheet)
+                case .sheetC:
+                    updateAttributeWindow(attribute: "\(BMIClass.attributesKeys[2])", shouldPresentSheet: $shouldPresentSheet)
+                case .sheetD:
+                    updateAttributeWindow(attribute: "\(BMIClass.attributesKeys[3])", shouldPresentSheet: $shouldPresentSheet)
+                case .sheetE:
+                    updateAttributeWindow(attribute: "\(BMIClass.attributesKeys[4])", shouldPresentSheet: $shouldPresentSheet)
                 }
             }
-        }
-        .onAppear() {
-            Task {
-                gender = try await BMIClass.setBMI().0
-                weight = try await String(BMIClass.setBMI().1)
-                height = try await String(BMIClass.setBMI().2)
-                age = try await String(BMIClass.setBMI().3)
-                reduction = try await BMIClass.setBMI().4
-            }
-        }
-        .sheet(item: $shouldPresentSheet) { sheet in
-            switch sheet {
-            case .sheetA:
-                editWindow(attribute: "Height", attributeValue: "\(height)")
-            case .sheetB:
-                editWindow(attribute: "Weight", attributeValue: "\(weight)")
+            .onChange(of: shouldPresentSheet) {
+                Task {
+                    try await BMIClass.displayAttributes()
+                }
             }
         }
     }
@@ -129,31 +98,56 @@ struct CreateEntryField: View {
     }
 }
 
-struct editWindow: View {
-    
+struct updateAttributeWindow: View {
     @State var attribute: String
-    @State var attributeValue: String
+    @State var attributeValue: String = ""
     @State var errors = [String]()
+    @Binding var shouldPresentSheet: EditChoice?
+    @State var birthDate: Date = Date()
+    @State var reduction = 0.0
     
     var body: some View {
         ZStack{
-            VStack {
-                CreateEntryField(label: "\(attribute)", text: $attributeValue)
-                
-                Button(action: {
-                    Task {
-                        errors = await storeAttributes(userKey: "\(attribute)", userValue: "\(attributeValue)").storeData()
-                        hideKeyboard()
+            VStack(spacing: 20) {
+                VStack {
+                    if "\(attribute)" == "Age" {
+                        DatePicker(selection: $birthDate, in: ...Date.now, displayedComponents: .date) {
+                            Text("Date of Birth")
+                                .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                                .onChange(of: birthDate) {
+                                    attributeValue = String(calculateAge(DOB: birthDate) ?? 0)
+                                }
+                        }  
+                    } else if "\(attribute)" == "Reduction Goal (%)" {
+                        CreateText(label: "Percentage Reduction Goal", size: 18)
+                        Slider(value: $reduction, in:0...100)
+                        CreateText(label: String(format: "%.2f%%", reduction), size: 20)
+                            .onChange(of: reduction) {
+                                attributeValue = String(format: "%.2f%", reduction)
+                            }
+                    } else {
+                        CreateEntryField(label: "\(attribute)", text: $attributeValue)
                     }
-                }, label: {
-                    Text("Set Goal")
-                })
-                .buttonStyle(AllButtonStyle())
-            }
-            
-            VStack(spacing: 5) {
-                ForEach(errors, id: \.self) { errorMessage in
-                    CreateText(label: errorMessage, size: 15, color: .red)
+                    
+                    Button(action: {
+                        Task {
+                            errors = await storeAttributes(userKey: "\(attribute)", userValue: attributeValue).storeData()
+                            if errors.isEmpty {
+                                shouldPresentSheet = nil
+                                hideKeyboard()
+                            }
+                            
+                        }
+                    }, label: {
+                        Text("Save")
+                    })
+                    .buttonStyle(AllButtonStyle())
+                }
+                
+                VStack(spacing: 5) {
+                    ForEach(errors, id: \.self) { errorMessage in
+                        CreateText(label: errorMessage, size: 15, color: .red)
+                    }
                 }
             }
             
@@ -162,29 +156,9 @@ struct editWindow: View {
     }
 }
 
-enum editChoice: String, Identifiable {
-    case sheetA, sheetB
+enum EditChoice: String, CaseIterable, Identifiable {
+    case sheetA, sheetB, sheetC, sheetD, sheetE
     var id: String {
         return self.rawValue
     }
 }
-
-
-//
-//                VStack (spacing: 30) {
-//                    DatePicker(selection: $birthDate, in: ...Date.now, displayedComponents: .date) {
-//                        Text("Date of Birth")
-//                            .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-//                    }
-//                    .accentColor(.blue)
-//                    CreateEntryField(label: "Weight:", text: $weight)
-//                    CreateEntryField(label: "Height:", text: $height)
-//                    CreateEntryField(label: "Gender:", text: $gender)
-//
-//                    VStack {
-//                        CreateText(label: "Percentage Reduction Goal", size: 18)
-//                        Slider(value: $reduction, in:0...100)
-//                        CreateText(label: String(format: "%.2f%%", reduction), size: 20)
-//                    }
-//
-//                }
