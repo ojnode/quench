@@ -9,8 +9,9 @@ import SwiftUI
 import Charts
 
 struct ProgressTracker: View {
-    @State var BMIResults = CalculateBMI()
+    @State var BMIResults = getBodyMassIndex()
     @State var signedOut = false
+    @State var displayBMI = ""
     
     var body: some View {
         ZStack {
@@ -22,6 +23,12 @@ struct ProgressTracker: View {
                     CreateText(label: "Quench", size: 60, weight: .medium)
                     CreateText(label: "One day at a time", size: 20, design: .serif)
                 }
+                .onAppear {
+                    calculateBMI()
+                }
+                .onReceive(BMIResults.objectWillChange) { _ in
+                    calculateBMI()
+                }
                 
                 Spacer()
                 VStack{
@@ -30,7 +37,7 @@ struct ProgressTracker: View {
                                         radius: 10, frameWidth: 60, frameHeight: 150)
                         CreateText(label: "BMI", size: 25, weight: .bold, color: .black)
                     }
-                    CreateText(label: String(BMIResults.getResults), size: 35,
+                    CreateText(label: displayBMI, size: 35,
                                weight: .semibold, color: .red)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -38,32 +45,18 @@ struct ProgressTracker: View {
                 .cornerRadius(20)
                 
                 Chart {
-                    
-                    ForEach (BMIArray(userBMI:BMIResults.getResults).data) { d in
+                    ForEach (BMIArray(userBMI:BMIResults.calculateBodyMassIndex()).data) { d in
                         
                         BarMark(x: PlottableValue.value("category", d.category),
                                 y: PlottableValue.value("range", d.range))
+                        
                         .foregroundStyle(d.userCategory == "Within Range" ? .green : Color("barColor"))
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.blue)
                 .cornerRadius(20)
-               
-                
-                VStack {
-                    HStack(spacing:200) {
-                        CreateImageView(image: "bmi", width: 2, height: 1,
-                                        radius: 30, frameWidth: 60, frameHeight: 100)
-                        CreateText(label: "BMI", size: 25, weight: .light, color: .black)
-                    }
-                    CreateText(label: String(BMIResults.getResults), size: 35,
-                               weight: .bold, color: .black)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color.blue)
-                .cornerRadius(20)
-                
+
                 Button(action: {AuthService.shared.signOut(); signedOut = true}, label: {
                     Text("Sign out")
                 })
@@ -71,9 +64,12 @@ struct ProgressTracker: View {
                     ContentView()
                 }
                 .buttonStyle(AllButtonStyle())
-            
             }
         }
+    }
+    
+    private func calculateBMI() {
+        displayBMI = BMIResults.calculateBodyMassIndex()
     }
 }
 
@@ -95,10 +91,10 @@ class BMICategory: Identifiable {
 }
 
 struct BMIArray {
-    let userBMI: Double
+    let userBMI: String
     var data  = [BMICategory]()
     
-    init(userBMI: Double) {
+    init(userBMI: String) {
         self.userBMI = userBMI
         self.data = [
             BMICategory(range: 18.5, category: "underweight"),
@@ -112,7 +108,7 @@ struct BMIArray {
     
     func updateBMICategory() {
         for index in data.indices.reversed() {
-            if userBMI > data[index].range {
+            if let userBMI = Double(userBMI), userBMI > data[index].range {
                 data[index].userCategory = "Within Range"
                 break
             }
