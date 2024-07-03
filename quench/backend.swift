@@ -8,7 +8,7 @@
 import FirebaseFirestore
 import FirebaseAuth
 
-struct storeAttributes  {
+struct storeAttributes {
     var userKey = ""
     var userValue = ""
     var firebase = FirebaseStoreUser()
@@ -30,6 +30,7 @@ struct storeAttributes  {
             if case let .incorrectValue(string) = error {
                 errorList.append(string)
             }
+            return errorList
         } catch {
             errorList.append("Something went wrong")
             return errorList
@@ -44,43 +45,6 @@ struct storeAttributes  {
         return errorList
     }
 }
-        
-//        do {
-//            try await createDatabase(data: ["height": height])
-//        } catch let error as storageValidation {
-//            if case let .errorAddingDocument(string) = error {
-//                errorList.append(string)
-//            }
-//        } catch {
-//            errorList.append("Something went wrong")
-//        }
-//        
-
-        
-        //        var errorList = [String]()
-        //        let stringReduction = String(format:"%.2f%", reduction)
-        //        let age = Calendar.current.dateComponents([.year], from: birthday,
-        //                                                  to: Date())
-        //           .year
-
-        //
-        //        for (key, value) in data {
-        //            do {
-        //                if key != "gender" {
-        //                    try await valueValidation(key: key, value: value)
-        //                }
-        //            } catch let error as storageValidation {
-        //                if case let .incorrectValue(string) = error {
-        //                    errorList.append(string)
-        //                }
-        //            } catch {
-        //                errorList.append("Something went wrong")
-        //            }
-        //        }
-        //
-
-        //        return errorList // remove later and implement optional
-        //        }
 
 enum storageValidation: Error {
     case errorAddingDocument(String)
@@ -169,62 +133,53 @@ class FirebaseStoreUser: ObservableObject {
             do {
                 let user = try self.getUserID()
                 let document = try await self.db.document("\(user)").getDocument()
-                self.getAttributesSet = document.exists
+                DispatchQueue.main.async { // REMOVED WARNING DUE TO PUBLISHED VARIABLE CHNAGES NOT OCCURING ON MAIN THREAD
+                    self.getAttributesSet = document.exists
+                    }
                 }
         catch {
-            self.getAttributesSet = false
+            DispatchQueue.main.async {
+                self.getAttributesSet = false
+                }
             }
         }
 }
 
-class CalculateBMI {
-    
+class AccessUserAttributes: ObservableObject {
+    @Published var userAttributes: [String:Any] = [:]
     let firebase = FirebaseStoreUser()
-    var attributesList: [String: Any] = [:]
-    var getResults: Double = 0
     var errorReturn: String = ""
+    var attributesKeys: [String] = []
     
     init() {
         Task{
-            do { 
-                try await setBMI()
+            do {
+                try await displayAttributes()
             } catch {
                 errorReturn = "something went wrong"
             }
         }
     }
     
-    func setBMI() async throws ->  (String, Double, Double, String, Double) {
-        guard let attributes = try await firebase.getData()
+    func displayAttributes() async throws {
+        guard let retrievedAttributes = try await firebase.getData()
         else {
             throw RetrieveDataErrors.attributesError
         }
-        
-        for (key, value) in attributes {
-            attributesList.updateValue(value, forKey: key)
+        DispatchQueue.main.async {
+            self.userAttributes = retrievedAttributes
+            self.attributesKeys = ["Age", "Height", "Weight", "Gender", "Reduction Goal (%)"]
         }
-
-        guard let stringHeight = attributesList["height"] as? String,
-              let stringGender = attributesList["gender"] as? String,
-              let stringAge = attributesList["age"] as? String,
-              let reduction = attributesList["reduction"] as? String,
-              let stringWeight = attributesList["weight"] as? String else {
-            throw RetrieveDataErrors.attributesError
-        }
-        
-        guard let height = Double(stringHeight),
-              let weight = Double(stringWeight),
-              let reduction = Double(reduction)
-        else {
-            throw RetrieveDataErrors.attributesError
-        }
-        
-        getResults = weight / height
-        
-        return (stringGender, weight, height, stringAge, reduction)
     }
 }
 
 enum RetrieveDataErrors: Error {
     case attributesError
+}
+
+func calculateAge(DOB: Date) -> Int? {
+    let age = Calendar.current.dateComponents([.year], from: DOB,
+                                        to: Date())
+                                 .year
+    return age
 }
