@@ -9,9 +9,9 @@ import SwiftUI
 import Charts
 
 struct ProgressTracker: View {
-    @State var BMIResults = getBodyMassIndex()
+    
     @State var signedOut = false
-    @State var displayBMI = ""
+    @EnvironmentObject var BMIClass: AccessUserAttributes
     
     var body: some View {
         ZStack {
@@ -23,21 +23,14 @@ struct ProgressTracker: View {
                     CreateText(label: "Quench", size: 60, weight: .medium)
                     CreateText(label: "One day at a time", size: 20, design: .serif)
                 }
-                .onAppear {
-                    calculateBMI()
-                }
-                .onReceive(BMIResults.objectWillChange) { _ in
-                    calculateBMI()
-                }
-                
                 Spacer()
-                VStack{
+                VStack {
                     HStack(spacing:200) {
                         CreateImageView(image: "bmi", width: 1, height: 1,
                                         radius: 10, frameWidth: 60, frameHeight: 150)
                         CreateText(label: "BMI", size: 25, weight: .bold, color: .black)
                     }
-                    CreateText(label: displayBMI, size: 35,
+                    CreateText(label: String(format: "%.2f%", BMIClass.BMI), size: 35,
                                weight: .semibold, color: .red)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -45,8 +38,7 @@ struct ProgressTracker: View {
                 .cornerRadius(20)
                 
                 Chart {
-                    ForEach (BMIArray(userBMI:BMIResults.calculateBodyMassIndex()).data) { d in
-                        
+                    ForEach (BMIArray(userBMI:BMIClass.BMI).data) { d in
                         BarMark(x: PlottableValue.value("category", d.category),
                                 y: PlottableValue.value("range", d.range))
                         
@@ -67,10 +59,6 @@ struct ProgressTracker: View {
             }
         }
     }
-    
-    private func calculateBMI() {
-        displayBMI = BMIResults.calculateBodyMassIndex()
-    }
 }
 
 #Preview {
@@ -78,6 +66,7 @@ struct ProgressTracker: View {
 }
 
 class BMICategory: Identifiable {
+    
     var id = UUID().uuidString
     var range: Double
     var category: String
@@ -91,10 +80,11 @@ class BMICategory: Identifiable {
 }
 
 struct BMIArray {
-    let userBMI: String
+    
+    let userBMI: Double
     var data  = [BMICategory]()
     
-    init(userBMI: String) {
+    init(userBMI: Double) {
         self.userBMI = userBMI
         self.data = [
             BMICategory(range: 18.5, category: "underweight"),
@@ -108,7 +98,7 @@ struct BMIArray {
     
     func updateBMICategory() {
         for index in data.indices.reversed() {
-            if let userBMI = Double(userBMI), userBMI > data[index].range {
+            if userBMI > data[index].range {
                 data[index].userCategory = "Within Range"
                 break
             }

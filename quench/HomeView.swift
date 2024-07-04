@@ -10,6 +10,7 @@ import SwiftUI
 struct HomeView: View {
     @State var signedOut: Bool = false
     @StateObject var firebaseInstance = FirebaseStoreUser()
+    @EnvironmentObject var BMIClass: AccessUserAttributes
     
     var body: some View {
         NavigationStack {
@@ -17,9 +18,23 @@ struct HomeView: View {
                 Color.black
                     .ignoresSafeArea()
                 
-                VStack {
-                    VStack {
-                        CreateText(label: "Quench", size: 25)
+                VStack(spacing:20) {
+
+                    HStack(spacing: 90) {
+                        NavigationLink(destination: SetGoal().environmentObject(BMIClass)) {
+                            Image(systemName: "person.crop.circle")
+                                .resizable()
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                        }
+                        
+                            CreateText(label: "Quench", size: 25)
+        
+                            Image(systemName: "gearshape")
+                                .resizable()
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                        
                     }
                   
                     DisplayOption(isGoalSet: firebaseInstance.getAttributesSet ?? false)
@@ -68,6 +83,9 @@ struct HomeView: View {
                     }
                     Spacer()
                 }
+                .onAppear {
+                        BMIClass.calculateBodyMassIndex()
+                }
             }
         }
     }
@@ -80,6 +98,8 @@ struct HomeView: View {
 
 struct DisplayOption: View {
     
+    @EnvironmentObject var BMIClass: AccessUserAttributes
+    
     var isGoalSet: Bool
     
     var image: String {
@@ -87,7 +107,7 @@ struct DisplayOption: View {
     }
     
     var destination: AnyView {
-        get {isGoalSet ? AnyView(ProgressTracker()) : AnyView(SetGoal())}
+        get {isGoalSet ? AnyView(ProgressTracker().environmentObject(BMIClass)) : AnyView(SetGoal().environmentObject(BMIClass))}
     }
     
     var body: some View {

@@ -7,9 +7,11 @@
 import SwiftUI
 
 struct ContentView: View {
+    
     @State var userSession = UserSession()
     @State var logSuccessful: Bool = false
     @State var logError: String = ""
+    @EnvironmentObject var BMIClass: AccessUserAttributes
     
     var body: some View {
         NavigationStack {
@@ -42,7 +44,7 @@ struct ContentView: View {
                             
                         }
                         .navigationDestination(isPresented: $logSuccessful) {
-                            HomeView()
+                            HomeView().environmentObject(BMIClass)
                         }
                         .buttonStyle(AllButtonStyle())
                         Spacer()
@@ -70,7 +72,6 @@ struct ContentView: View {
     
 }
 
-
 #Preview {
     ContentView()
         .modelContainer(for: Item.self, inMemory: true)
@@ -95,6 +96,7 @@ struct AllButtonStyle: ButtonStyle {
 }
 
 struct CreateText: View {
+    
     var label: String
     var size: Double
     var weight: Font.Weight = .light
@@ -109,6 +111,7 @@ struct CreateText: View {
 }
 
 struct CreateTextField: View {
+
     var text: String
     var inputText: Binding<String>
     
@@ -121,6 +124,7 @@ struct CreateTextField: View {
 }
 
 struct CreateSecureField: View {
+
     var text: String
     var inputText: Binding<String>
     
@@ -133,6 +137,7 @@ struct CreateSecureField: View {
 }
 
 struct CreateImageView: View {
+
     var image: String
     var width: Double
     var height: Double
@@ -146,5 +151,24 @@ struct CreateImageView: View {
             .aspectRatio(CGSize(width: width, height: height), contentMode: .fit)
             .frame(width:frameWidth ?? nil, height: frameHeight ?? nil)
             .cornerRadius(radius)
+    }
+}
+
+struct CreateEntryField: View {
+
+    var label: String
+    var text: Binding<String>
+    var secure: Bool = false
+    
+    var body: some View {
+        
+        HStack {
+            CreateText(label: label, size: 20, weight: .medium)
+            if !(secure) {
+                CreateTextField(text: "Enter your \(label)", inputText: text)
+            } else {
+                CreateSecureField(text: "Enter your \(label)", inputText: text)
+            }
+        }
     }
 }
