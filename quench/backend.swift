@@ -7,6 +7,7 @@
 
 import FirebaseFirestore
 import FirebaseAuth
+import Combine
 
 struct storeAttributes {
     var userKey = ""
@@ -51,7 +52,6 @@ enum storageValidation: Error {
     case incorrectValue(String)
 }
 
-// consider external names and local names to imrpove readablitiyi
 func createDatabase(data: [String: String]) async throws {
     let db = FirebaseStoreUser().db
     let user = try FirebaseStoreUser().getUserID()
@@ -59,15 +59,18 @@ func createDatabase(data: [String: String]) async throws {
 }
 
 func valueValidation(key: String, value: String) async throws -> Double {
-    guard let doublevalue = Double(value) else {
-        throw storageValidation.incorrectValue("invalid \(key) input")
+    if key != "Gender" {
+        guard let doublevalue = Double(value) else {
+            throw storageValidation.incorrectValue("invalid \(key) input")
+        }
+        
+        if doublevalue < 0 {
+            throw storageValidation.incorrectValue("invalid \(key) input")
+        }
+        
+        return doublevalue
     }
-    
-    if doublevalue < 0 {
-        throw storageValidation.incorrectValue("invalid \(key) input")
-    }
-    
-    return doublevalue
+    return 0.0
 }
 
 
@@ -145,16 +148,19 @@ class FirebaseStoreUser: ObservableObject {
         }
 }
 
+// return error and  display later 
 class AccessUserAttributes: ObservableObject {
     @Published var userAttributes: [String:Any] = [:]
     let firebase = FirebaseStoreUser()
     var errorReturn: String = ""
     var attributesKeys: [String] = []
+    @Published var BMI: Double = 0.0
     
     init() {
         Task{
             do {
                 try await displayAttributes()
+                calculateBodyMassIndex()
             } catch {
                 errorReturn = "something went wrong"
             }
@@ -171,15 +177,28 @@ class AccessUserAttributes: ObservableObject {
             self.attributesKeys = ["Age", "Height", "Weight", "Gender", "Reduction Goal (%)"]
         }
     }
+    
+    func calculateBodyMassIndex() {
+        if let anyWeight = userAttributes["Weight"] as? String,
+           let weight = Double(anyWeight),
+           let anyHeight = userAttributes["Height"] as? String,
+           let height = Double(anyHeight), height > 0 {
+            BMI = weight / (height * height)
+        } else {
+            BMI = 0
+        }
+    }
 }
+
+
 
 enum RetrieveDataErrors: Error {
     case attributesError
 }
 
-func calculateAge(DOB: Date) -> Int? {
+func calculateAge(DOB: Date) -> Int {
     let age = Calendar.current.dateComponents([.year], from: DOB,
                                         to: Date())
                                  .year
-    return age
+    return age ?? 0
 }
