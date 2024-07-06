@@ -11,7 +11,6 @@ struct ContentView: View {
     @State var userSession = UserSession()
     @State var logSuccessful: Bool = false
     @State var logError: String = ""
-    @EnvironmentObject var BMIClass: AccessUserAttributes
     
     var body: some View {
         NavigationStack {
@@ -31,22 +30,31 @@ struct ContentView: View {
                         CreateSecureField(text: "Password", inputText: $userSession.password)
                         
                         Button("Sign In") {
-                            Task { do {
-                                logSuccessful = try await userSession.signInWithEmail()
-                                hideKeyboard()
-                            } catch let error as LogStatusError {
-                                if case let .authorizationDenied(string) = error {
-                                    logError = string
-                                    logSuccessful = false
+                            Task {
+                                do {
+                                    logSuccessful = try await userSession.signInWithEmail()
+                                    hideKeyboard()
+                                } catch let error as LogStatusError {
+                                    if case let .authorizationDenied(string) = error {
+                                        logError = string
+                                        logSuccessful = false
                                     }
+                                } catch {
+                                    logError = "something went wrong"
                                 }
                             }
                             
                         }
                         .navigationDestination(isPresented: $logSuccessful) {
-                            HomeView().environmentObject(BMIClass)
+                            HomeView()
                         }
                         .buttonStyle(AllButtonStyle())
+                        .onTapGesture {
+                            hideKeyboard()
+                        }
+                            
+                        }
+                        
                         Spacer()
                         
                         NavigationLink(destination: RegisterView().navigationBarBackButtonHidden(true)) {
@@ -65,11 +73,7 @@ struct ContentView: View {
                 }
             }
         }
-        .onTapGesture {
-            hideKeyboard()
-        }
-    }
-    
+
 }
 
 #Preview {

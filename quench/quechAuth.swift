@@ -24,7 +24,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct quenchAuthApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    @StateObject private var BMIClass = AccessUserAttributes()
     
     init() {
         FirebaseApp.configure()
@@ -35,10 +34,8 @@ struct quenchAuthApp: App {
             NavigationStack {
                 if (AuthService.shared.currentUser != nil) {
                     HomeView()
-                        .environmentObject(BMIClass)
                 } else {
                     ContentView()
-                        .environmentObject(BMIClass)
                 }
             }
         }

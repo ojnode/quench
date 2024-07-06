@@ -10,7 +10,7 @@ import SwiftUI
 struct HomeView: View {
     @State var signedOut: Bool = false
     @StateObject var firebaseInstance = FirebaseStoreUser()
-    @EnvironmentObject var BMIClass: AccessUserAttributes
+    @StateObject var BMIClass = AccessUserAttributes()
     
     var body: some View {
         NavigationStack {
@@ -83,11 +83,9 @@ struct HomeView: View {
                     }
                     Spacer()
                 }
-                .onAppear {
-                        BMIClass.calculateBodyMassIndex()
-                }
             }
         }
+        .environmentObject(BMIClass)
     }
 }
 
