@@ -38,6 +38,7 @@ struct HomeView: View {
                     }
                   
                     DisplayOption(isGoalSet: firebaseInstance.getAttributesSet ?? false)
+                        .environmentObject(BMIClass)
                     
                     VStack(spacing:25) {
                                                 
@@ -83,9 +84,14 @@ struct HomeView: View {
                     }
                     Spacer()
                 }
+                .onAppear  {
+                    Task {
+                        try await BMIClass.displayAttributes()
+                        BMIClass.calculateBodyMassIndex()
+                    }
+                }
             }
         }
-        .environmentObject(BMIClass)
     }
 }
 
