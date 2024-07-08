@@ -190,6 +190,42 @@ class AccessUserAttributes: ObservableObject {
     }
 }
 
+struct unitsPerDrink {
+    var unitsPerDrinkArray = [
+        "Single small shot of spirits* (25ml, ABV 40%)" : 1,
+        "Alcopop (275ml, ABV 5.5%)" : 1.5,
+        "Small glass of red/white/rosé wine (125ml, ABV 12%)" : 1.5,
+        "Bottle of lager/beer/cider (5%) 330ml" : 1.7,
+        "Can of lager/beer/cider (440ml, ABV 5.5%)" : 2.4,
+        "Pint of lower-strength lager/beer/cider (ABV 3.6%)" : 2,
+        "Standard glass of red/white/rosé wine (175ml, ABV 12%)" : 2.1,
+        "Pint of higher-strength lager/beer/cider (ABV 5.2%) ": 3,
+        "Large glass of red/white/rosé wine (250ml, ABV 12%) ": 3
+        ]
+}
+
+class unitCalculator {
+    
+    var userUnitsPerDrink: [String: Double] = [:]
+    
+    func individualWeeklyUnits(drinkType: String, userUnitsPerWeek: Double) {
+        let drinkInformation = unitsPerDrink().unitsPerDrinkArray
+        if let unitsperDrink = drinkInformation[drinkType] {
+            userUnitsPerDrink[drinkType] = unitsperDrink * userUnitsPerWeek
+            print(userUnitsPerDrink)
+        }
+
+    }
+    
+    func calculateTotalUnits() {
+        var totalUnits = 0.0
+        for (drink, units) in userUnitsPerDrink {
+            totalUnits += units
+            print(totalUnits)
+            
+        }
+    }
+}
 
 
 enum RetrieveDataErrors: Error {
