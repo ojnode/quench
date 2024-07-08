@@ -12,7 +12,8 @@ struct SetGoal: View {
     @State var errors = [String]()
     @State var birthDate = Date.now
     @State var shouldPresentSheet: EditChoice? = nil
-    @StateObject var BMIClass = AccessUserAttributes()
+    @EnvironmentObject var BMIClass: AccessUserAttributes
+    @State var recordIntake = false
     
     var body: some View {
         ZStack {
@@ -25,7 +26,7 @@ struct SetGoal: View {
                 }
                 Spacer()
                 
-                VStack(spacing:60) {
+                VStack(spacing:50) {
                     ForEach(BMIClass.attributesKeys.indices, id: \.self) { index in
                         let key = BMIClass.attributesKeys[index]
                         
@@ -48,6 +49,18 @@ struct SetGoal: View {
                         .cornerRadius(20)
                         .buttonStyle(AllButtonStyle())
                     }
+                    
+                    Button(action: {recordIntake = true}, label: {
+                        Text("Current Unit Measurement")
+                            .frame(width: 100, height: 40)
+                            .foregroundColor(.blue)
+                            .background(Color.black)
+                            .cornerRadius(10)
+                    })
+                    .navigationDestination(isPresented: $recordIntake) {
+                        SwiftUIView()
+                    }
+                    
                 }
                 Spacer()
             }
@@ -69,6 +82,7 @@ struct SetGoal: View {
             .onChange(of: shouldPresentSheet) {
                 Task {
                     try await BMIClass.displayAttributes()
+                    BMIClass.calculateBodyMassIndex()
                 }
             }
         }
@@ -78,24 +92,6 @@ struct SetGoal: View {
 #Preview {
     SetGoal()
         .modelContainer(for: Item.self, inMemory: true)
-}
-
-struct CreateEntryField: View {
-    var label: String
-    var text: Binding<String>
-    var secure: Bool = false
-    
-    var body: some View {
-        
-        HStack {
-            CreateText(label: label, size: 20, weight: .medium)
-            if !(secure) {
-                CreateTextField(text: "Enter your \(label)", inputText: text)
-            } else { 
-                CreateSecureField(text: "Enter your \(label)", inputText: text)
-            }
-        }
-    }
 }
 
 struct updateAttributeWindow: View {
@@ -115,7 +111,7 @@ struct updateAttributeWindow: View {
                             Text("Date of Birth")
                                 .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
                                 .onChange(of: birthDate) {
-                                    attributeValue = String(calculateAge(DOB: birthDate) ?? 0)
+                                    attributeValue = String(calculateAge(DOB: birthDate))
                                 }
                         }  
                     } else if "\(attribute)" == "Reduction Goal (%)" {
