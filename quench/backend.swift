@@ -219,10 +219,8 @@ class unitCalculator {
     
     func calculateTotalUnits() {
         var totalUnits = 0.0
-        for (drink, units) in userUnitsPerDrink {
+        for (_, units) in userUnitsPerDrink {
             totalUnits += units
-            print(totalUnits)
-            
         }
     }
 }
