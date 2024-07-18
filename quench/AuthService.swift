@@ -10,7 +10,6 @@ import FirebaseAuth
 
 @Observable
 final class AuthService {
-    
     var currentUser: FirebaseAuth.User?
     private let auth = Auth.auth()
     
