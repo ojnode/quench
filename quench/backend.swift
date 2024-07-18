@@ -147,7 +147,6 @@ class FirebaseStoreUser: ObservableObject {
             }
         }
 }
-
 // return error and  display later 
 class AccessUserAttributes: ObservableObject {
     @Published var userAttributes: [String:Any] = [:]
@@ -204,27 +203,26 @@ struct unitsPerDrink {
         ]
 }
 
-class unitCalculator {
-    
+class unitCalculator: ObservableObject {
     var userUnitsPerDrink: [String: Double] = [:]
+    @Published var totalUnits: Double = 0.0
     
     func individualWeeklyUnits(drinkType: String, userUnitsPerWeek: Double) {
         let drinkInformation = unitsPerDrink().unitsPerDrinkArray
         if let unitsperDrink = drinkInformation[drinkType] {
             userUnitsPerDrink[drinkType] = unitsperDrink * userUnitsPerWeek
-            print(userUnitsPerDrink)
         }
-
+        calculateTotalUnits()
     }
     
     func calculateTotalUnits() {
-        var totalUnits = 0.0
+        totalUnits = 0.0
         for (_, units) in userUnitsPerDrink {
             totalUnits += units
         }
     }
-}
 
+}
 
 enum RetrieveDataErrors: Error {
     case attributesError
