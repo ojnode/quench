@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct SwiftUIView: View {
-    var drinkClass = unitCalculator()
+struct AlcoholUnits: View {
     @State var amountDrink: [String: Double] = [:]
+    @EnvironmentObject var units: unitCalculator
     
     var body: some View {
         ZStack {
@@ -35,8 +35,7 @@ struct SwiftUIView: View {
                                             get: { amountDrink[key] ?? 0.0},
                                             set: { newValue in
                                                 amountDrink[key] = newValue
-                                                drinkClass.individualWeeklyUnits(drinkType: key, userUnitsPerWeek: newValue)
-                                                drinkClass.calculateTotalUnits()
+                                                units.individualWeeklyUnits(drinkType: key, userUnitsPerWeek: newValue)
                                             }
                                     ), in:0...50, 
                                         step: 1
@@ -55,5 +54,5 @@ struct SwiftUIView: View {
 }
 
 #Preview {
-    SwiftUIView()
+    AlcoholUnits()
 }
