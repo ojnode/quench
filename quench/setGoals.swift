@@ -13,7 +13,6 @@ struct SetGoal: View {
     @State var birthDate = Date.now
     @State var shouldPresentSheet: EditChoice? = nil
     @EnvironmentObject var BMIClass: AccessUserAttributes
-    @State var recordIntake = false
     
     var body: some View {
         ZStack {
@@ -49,17 +48,7 @@ struct SetGoal: View {
                         .cornerRadius(20)
                         .buttonStyle(AllButtonStyle())
                     }
-                    
-                    Button(action: {recordIntake = true}, label: {
-                        Text("Current Unit Measurement")
-                            .frame(width: 100, height: 40)
-                            .foregroundColor(.blue)
-                            .background(Color.black)
-                            .cornerRadius(10)
-                    })
-                    .navigationDestination(isPresented: $recordIntake) {
-                        SwiftUIView()
-                    }
+            
                     
                 }
                 Spacer()
@@ -68,15 +57,15 @@ struct SetGoal: View {
             .sheet(item: $shouldPresentSheet) { sheet in
                 switch sheet {
                 case .sheetA:
-                    updateAttributeWindow(attribute: "\(BMIClass.attributesKeys[0])", shouldPresentSheet: $shouldPresentSheet)
+                    UpdateAttributeWindow(attribute: "\(BMIClass.attributesKeys[0])", shouldPresentSheet: $shouldPresentSheet)
                 case .sheetB:
-                    updateAttributeWindow(attribute: "\(BMIClass.attributesKeys[1])", shouldPresentSheet: $shouldPresentSheet)
+                    UpdateAttributeWindow(attribute: "\(BMIClass.attributesKeys[1])", shouldPresentSheet: $shouldPresentSheet)
                 case .sheetC:
-                    updateAttributeWindow(attribute: "\(BMIClass.attributesKeys[2])", shouldPresentSheet: $shouldPresentSheet)
+                    UpdateAttributeWindow(attribute: "\(BMIClass.attributesKeys[2])", shouldPresentSheet: $shouldPresentSheet)
                 case .sheetD:
-                    updateAttributeWindow(attribute: "\(BMIClass.attributesKeys[3])", shouldPresentSheet: $shouldPresentSheet)
+                    UpdateAttributeWindow(attribute: "\(BMIClass.attributesKeys[3])", shouldPresentSheet: $shouldPresentSheet)
                 case .sheetE:
-                    updateAttributeWindow(attribute: "\(BMIClass.attributesKeys[4])", shouldPresentSheet: $shouldPresentSheet)
+                    UpdateAttributeWindow(attribute: "\(BMIClass.attributesKeys[4])", shouldPresentSheet: $shouldPresentSheet)
                 }
             }
             .onChange(of: shouldPresentSheet) {
@@ -94,7 +83,7 @@ struct SetGoal: View {
         .modelContainer(for: Item.self, inMemory: true)
 }
 
-struct updateAttributeWindow: View {
+struct UpdateAttributeWindow: View {
     @State var attribute: String
     @State var attributeValue: String = ""
     @State var errors = [String]()
@@ -132,7 +121,6 @@ struct updateAttributeWindow: View {
                                 shouldPresentSheet = nil
                                 hideKeyboard()
                             }
-                            
                         }
                     }, label: {
                         Text("Save")
@@ -146,9 +134,7 @@ struct updateAttributeWindow: View {
                     }
                 }
             }
-            
         }
-        
     }
 }
 
