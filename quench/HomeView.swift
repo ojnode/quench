@@ -11,6 +11,7 @@ struct HomeView: View {
     @State var signedOut: Bool = false
     @StateObject var firebaseInstance = FirebaseStoreUser()
     @StateObject var BMIClass = AccessUserAttributes()
+    @StateObject var units = unitCalculator()
     
     var body: some View {
         NavigationStack {
@@ -21,7 +22,11 @@ struct HomeView: View {
                 VStack(spacing:20) {
 
                     HStack(spacing: 90) {
-                        NavigationLink(destination: SetGoal().environmentObject(BMIClass)) {
+                        NavigationLink(destination: SetGoal()
+                            .environmentObject(BMIClass)
+                            .environmentObject(units)
+                        )
+                        {
                             Image(systemName: "person.crop.circle")
                                 .resizable()
                                 .frame(width: 30, height: 30)
@@ -39,10 +44,9 @@ struct HomeView: View {
                   
                     DisplayOption(isGoalSet: firebaseInstance.getAttributesSet ?? false)
                         .environmentObject(BMIClass)
+                        .environmentObject(units)
                     
                     VStack(spacing:25) {
-                                                
-                        NavigationLink(destination: GoogleMapsView()) {
                             VStack (spacing:25) {
                                 Image(systemName: "map.circle")
                                     .resizable()
@@ -51,26 +55,15 @@ struct HomeView: View {
                                     .foregroundColor(.black)
                                 
                             }
+            
+                        VStack (spacing:25) {
+                            Image(systemName: "map.circle")
+                                .resizable()
+                                .frame(width: 60, height: 60)
+                            Text("Go to Map")
+                                .foregroundColor(.black)
+                            
                         }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .background(Color.blue)
-                        .cornerRadius(20)
-                        .buttonStyle(AllButtonStyle())
-                        
-                        NavigationLink(destination: GoogleMapsView()) {
-                            VStack (spacing:25) {
-                                Image(systemName: "map.circle")
-                                    .resizable()
-                                    .frame(width: 60, height: 60)
-                                Text("Go to Map")
-                                    .foregroundColor(.black)
-                                
-                            }
-                        }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .background(Color.blue)
-                        .cornerRadius(20)
-                        .buttonStyle(AllButtonStyle())
                         
                         Spacer()
                         
@@ -101,8 +94,8 @@ struct HomeView: View {
 }
 
 struct DisplayOption: View {
-    
     @EnvironmentObject var BMIClass: AccessUserAttributes
+    @EnvironmentObject var units: unitCalculator
     
     var isGoalSet: Bool
     
@@ -111,7 +104,13 @@ struct DisplayOption: View {
     }
     
     var destination: AnyView {
-        get {isGoalSet ? AnyView(ProgressTracker().environmentObject(BMIClass)) : AnyView(SetGoal().environmentObject(BMIClass))}
+        get {isGoalSet ? AnyView(ProgressTracker()
+            .environmentObject(BMIClass)
+            .environmentObject(units)
+        ) : AnyView(SetGoal()
+            .environmentObject(BMIClass)
+        )
+        }
     }
     
     var body: some View {
