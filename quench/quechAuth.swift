@@ -9,7 +9,7 @@ import SwiftUI
 import FirebaseCore
 
 @main
-struct quenchAuthApp: App {
+struct QuenchAuthApp: App {
     
     init() {
         FirebaseApp.configure()
