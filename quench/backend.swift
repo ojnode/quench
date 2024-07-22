@@ -10,8 +10,8 @@ import FirebaseAuth
 import Combine
 
 struct storeAttributes {
-    var userKey = ""
-    var userValue = ""
+    var userKey: String
+    var userValue: String
     var firebase = FirebaseStoreUser()
     
     func storeData()  async -> [String] {
