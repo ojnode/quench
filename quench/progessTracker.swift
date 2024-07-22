@@ -24,6 +24,9 @@ struct ProgressTracker: View {
                     CreateText(label: "Quench", size: 60, weight: .medium)
                     CreateText(label: "One day at a time", size: 20, design: .serif)
                 }
+//                .onAppear {
+//                    units.calculateTotalUnits()
+//                }
                 Spacer()
                 
                 VStack {
@@ -68,17 +71,6 @@ struct ProgressTracker: View {
                                 CreateText(label: String(format: "%.2f unit(s)", 0), size: 20,
                                            weight: .semibold, color: .red)
                             }
-//                            Button(action: {recordIntake = true}, label: {
-//                                Text("Update")
-//                                    .frame(width: 70, height: 40)
-//                                    .foregroundColor(.blue)
-//                                    .background(Color.black)
-//                                    .cornerRadius(10)
-//                            })
-//                            .navigationDestination(isPresented: $recordIntake) {
-//                                AlcoholUnits().environmentObject(units)
-//                            }
-                            
                         }
                         HStack(spacing:120) {
                             HStack(spacing:20) {

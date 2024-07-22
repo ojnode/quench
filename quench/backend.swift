@@ -206,22 +206,45 @@ struct unitsPerDrink {
 class unitCalculator: ObservableObject {
     var userUnitsPerDrink: [String: Double] = [:]
     @Published var totalUnits: Double = 0.0
+    let userDrinks = UserDefaults.standard
     
     func individualWeeklyUnits(drinkType: String, userUnitsPerWeek: Double) {
         let drinkInformation = unitsPerDrink().unitsPerDrinkArray
         if let unitsperDrink = drinkInformation[drinkType] {
             userUnitsPerDrink[drinkType] = unitsperDrink * userUnitsPerWeek
         }
+        saveuserUnitsPerDrink()
         calculateTotalUnits()
+    }
+    
+    func saveuserUnitsPerDrink() {
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: userUnitsPerDrink, options: .prettyPrinted)
+            userDrinks.set(jsonData, forKey: "drinks")
+        } catch {
+            print("e no work")
+        }
     }
     
     func calculateTotalUnits() {
         totalUnits = 0.0
-        for (_, units) in userUnitsPerDrink {
-            totalUnits += units
+        guard let userData = userDrinks.data(forKey: "drinks") else {
+            return
+        }
+        
+        do {
+            let savedDrinks = try JSONSerialization.jsonObject(with: userData, options: [])
+            guard let convertedSavedDrinks = savedDrinks as? [String: Double] else {
+                return
+            }
+            
+            for (_, units) in convertedSavedDrinks {
+                totalUnits += units
+            }
+        } catch {
+            print("e no work")
         }
     }
-
 }
 
 enum RetrieveDataErrors: Error {
