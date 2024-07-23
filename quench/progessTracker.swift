@@ -11,8 +11,9 @@ import Charts
 struct ProgressTracker: View {
     @State var signedOut = false
     @State var recordIntake = false
+//    @State var totalUnits = 0.0
     @EnvironmentObject var BMIClass: AccessUserAttributes
-    @EnvironmentObject var units: unitCalculator
+    @EnvironmentObject var units: localStorage
     
     var body: some View {
         ZStack {
@@ -24,9 +25,6 @@ struct ProgressTracker: View {
                     CreateText(label: "Quench", size: 60, weight: .medium)
                     CreateText(label: "One day at a time", size: 20, design: .serif)
                 }
-//                .onAppear {
-//                    units.calculateTotalUnits()
-//                }
                 Spacer()
                 
                 VStack {
@@ -49,7 +47,8 @@ struct ProgressTracker: View {
                             HStack(spacing:20) {
                                 CreateImageView(image: "wine", width: 1, height: 1,
                                                 radius: 10, frameWidth: 50, frameHeight: 30)
-                                CreateText(label: String(format: "%.2f unit(s)", units.totalUnits), size: 20,
+                                CreateText(label: String(format: "%.2f unit(s)", UserDefaults.standard.double(forKey: "totalUnits")),
+                                           size: 20,
                                            weight: .semibold, color: .red)
                             }
                             Button(action: {recordIntake = true}, label: {
@@ -79,16 +78,6 @@ struct ProgressTracker: View {
                                 CreateText(label: String(format: "%.2f unit(s)", 0), size: 20,
                                            weight: .semibold, color: .red)
                             }
-//                            Button(action: {recordIntake = true}, label: {
-//                                Text("Update")
-//                                    .frame(width: 70, height: 40)
-//                                    .foregroundColor(.blue)
-//                                    .background(Color.black)
-//                                    .cornerRadius(10)
-//                            })
-//                            .navigationDestination(isPresented: $recordIntake) {
-//                                AlcoholUnits().environmentObject(units)
-//                            }
                             
                         }
                     }

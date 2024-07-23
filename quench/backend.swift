@@ -6,23 +6,19 @@
 //
 
 import FirebaseFirestore
+import Firebase
 import FirebaseAuth
 import Combine
+import SQLite
 
 struct storeAttributes {
     var userKey: String
     var userValue: String
-    var firebase = FirebaseStoreUser()
     
     func storeData()  async -> [String] {
+        let firebase = FirebaseStoreUser()
         var errorList = [String]()
-        var userID = ""
-        do {
-            userID = try firebase.getUserID()
-        } catch {
-            errorList.append("Something went wrong")
-        }
-        
+        let userID = userID().getUserID()
         let docRef = firebase.db.document(userID)
         
         do {
@@ -44,6 +40,40 @@ struct storeAttributes {
             return errorList
         }
         return errorList
+    }
+}
+
+struct storeSubstanceIntakeOnline {
+    var substanceType: String
+    var substanceAmount: [String: Double]
+    let firebase = FirebaseStoreUser()
+    
+    func storedata() async -> String? {
+        
+        let userID = userID().getUserID()
+        let docRef = firebase.db.document(userID)
+        
+        do {
+            try await docRef.updateData(["\(substanceType)": "\(substanceAmount)"])
+        } catch {
+            return "something went wrong" // handle error better later
+        }
+        return nil
+    }
+    
+}
+
+struct userID {
+    let firebase = FirebaseStoreUser()
+    
+    func getUserID() -> String {
+        var userID = ""
+        do {
+            userID = try firebase.getUserID()
+        } catch {
+            return "something went wrong" // handle error better later
+        }
+        return userID
     }
 }
 
@@ -104,24 +134,25 @@ struct UserSession {
 enum LogStatusError: Error {
     case authorizationDenied(String)
 }
-enum userID: Error {
+
+enum userIDErrors: Error {
     case IDnotfound
 }
 
 class FirebaseStoreUser: ObservableObject {
-    let db = Firestore.firestore().collection("users")
+    let db = Firestore.firestore().collection("users") // 
     let currentUser = Auth.auth().currentUser
-    @Published var getAttributesSet: Bool?
+    @Published var checkAttributesSet: Bool?
     
     init() {
         Task {
-            await self.setAttributesExist()
+            await self.setAttributes()
         }
     }
     
     func getUserID() throws -> String {
         guard let user = currentUser?.uid else {
-            throw userID.IDnotfound
+            throw userIDErrors.IDnotfound
         }
         return user
     }
@@ -132,17 +163,17 @@ class FirebaseStoreUser: ObservableObject {
         return doc
     }
     
-   func setAttributesExist() async {
+   func setAttributes() async {
             do {
                 let user = try self.getUserID()
                 let document = try await self.db.document("\(user)").getDocument()
                 DispatchQueue.main.async { // REMOVED WARNING DUE TO PUBLISHED VARIABLE CHNAGES NOT OCCURING ON MAIN THREAD
-                    self.getAttributesSet = document.exists
+                    self.checkAttributesSet = document.exists
                     }
                 }
         catch {
             DispatchQueue.main.async {
-                self.getAttributesSet = false
+                self.checkAttributesSet = false
                 }
             }
         }
@@ -156,7 +187,7 @@ class AccessUserAttributes: ObservableObject {
     @Published var BMI: Double = 0.0
     
     init() {
-        Task{
+        Task {
             do {
                 try await displayAttributes()
                 calculateBodyMassIndex()
@@ -190,7 +221,7 @@ class AccessUserAttributes: ObservableObject {
 }
 
 struct unitsPerDrink {
-    var unitsPerDrinkArray = [
+    let unitsPerDrinkArray = [
         "Single small shot of spirits* (25ml, ABV 40%)" : 1,
         "Alcopop (275ml, ABV 5.5%)" : 1.5,
         "Small glass of red/white/rosé wine (125ml, ABV 12%)" : 1.5,
@@ -203,52 +234,107 @@ struct unitsPerDrink {
         ]
 }
 
-class unitCalculator: ObservableObject {
+class userIntakeStorage: ObservableObject {
     var userUnitsPerDrink: [String: Double] = [:]
-    @Published var totalUnits: Double = 0.0
-    let userDrinks = UserDefaults.standard
     
-    func individualWeeklyUnits(drinkType: String, userUnitsPerWeek: Double) {
+    func userWeeklyIntake(drinkType: String, userUnitsPerWeek: Double) {
         let drinkInformation = unitsPerDrink().unitsPerDrinkArray
         if let unitsperDrink = drinkInformation[drinkType] {
             userUnitsPerDrink[drinkType] = unitsperDrink * userUnitsPerWeek
         }
-        saveuserUnitsPerDrink()
-        calculateTotalUnits()
     }
-    
-    func saveuserUnitsPerDrink() {
-        do {
-            let jsonData = try JSONSerialization.data(withJSONObject: userUnitsPerDrink, options: .prettyPrinted)
-            userDrinks.set(jsonData, forKey: "drinks")
-        } catch {
-            print("e no work")
-        }
+        
+    func saveUserUnitsPerDrink() async {
+        let substanceIntake = storeSubstanceIntakeOnline(substanceType: "alcohol", substanceAmount: userUnitsPerDrink)
+        await substanceIntake.storedata()
     }
+}
+
+class localStorage: userIntakeStorage {
+    var rowIDs = [Int64]()
+    @Published var totalUnits: Double = 0.0
+    let user: Table
+    let db: Connection
     
-    func calculateTotalUnits() {
-        totalUnits = 0.0
-        guard let userData = userDrinks.data(forKey: "drinks") else {
-            return
-        }
+    var unitTotalCalculator: getTotalUnits?
+    
+    override init() {
+        user = Table("\(userID().getUserID())")
         
         do {
-            let savedDrinks = try JSONSerialization.jsonObject(with: userData, options: [])
-            guard let convertedSavedDrinks = savedDrinks as? [String: Double] else {
-                return
+            db = try Connection(retrieveDatabasePath().path)
+        } catch {
+            fatalError("Unable to open database connection: \(error)")
+        }
+    }
+    
+    func saveData() async -> String? {
+        do {
+            try db.run(user.drop(ifExists: true))
+            let db = try Connection(retrieveDatabasePath().path)
+            let id = Expression<Int>("id")
+            let drinkName = Expression<String>("drinkName")
+            let units = Expression<Double>("units")
+            
+            try db.run(user.create() { t in
+                t.column(id, primaryKey: .autoincrement)
+                t.column(drinkName)
+                t.column(units)
+            })
+            
+            for (drink, drinkUnit) in userUnitsPerDrink {
+                print("during insertion \(drink)")
+                let rowID = try db.run(user.insert(drinkName <- drink, units <- drinkUnit))
+                rowIDs.append(rowID)
             }
             
-            for (_, units) in convertedSavedDrinks {
-                totalUnits += units
+            unitTotalCalculator = getTotalUnits(dataBase: db, savedDrinks: user)
+            totalUnits = try await unitTotalCalculator?.getTotalUnits() ?? 0
+            
+            saveTotalUnits()
+            
+        } catch {
+            return "something went wrong"
+        }
+        userUnitsPerDrink = [:]
+        return nil
+    }
+    
+    // for learning purpose, yes I can just save total to mySQL
+    private func saveTotalUnits() {
+        UserDefaults.standard.set(totalUnits, forKey: "totalUnits")
+    }
+}
+
+class getTotalUnits: ObservableObject {
+    let dataBase: Connection
+    let savedDrinks: Table
+    let units = Expression<Double>("units")
+    var totalUnits = 0.0
+    
+    init(dataBase: Connection, savedDrinks: Table) {
+        self.dataBase = dataBase
+        self.savedDrinks = savedDrinks
+    }
+    
+    func getTotalUnits() async throws -> Double {
+        
+        do {
+            for user in try dataBase.prepare(savedDrinks) {
+                totalUnits += user[units]
+                print(user)
             }
         } catch {
-            print("e no work")
+            throw RetrieveDataErrors.unitsError
         }
+        
+        return totalUnits
     }
 }
 
 enum RetrieveDataErrors: Error {
     case attributesError
+    case unitsError
 }
 
 func calculateAge(DOB: Date) -> Int {
@@ -256,4 +342,12 @@ func calculateAge(DOB: Date) -> Int {
                                         to: Date())
                                  .year
     return age ?? 0
+}
+
+func retrieveDatabasePath() -> URL {
+    let fileManager = FileManager.default
+    let applicationSupportDirectory = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+    let databaseURL = applicationSupportDirectory.appendingPathComponent("myDatabase.sqlite")
+    
+    return databaseURL
 }
