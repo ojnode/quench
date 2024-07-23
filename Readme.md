@@ -5,7 +5,8 @@ Migraine Level: TBD
 Quench
 
 Framework: swiftUI
-Database: FireBaseFireStore(noSQL)
+Database: FireBaseFireStore(noSQL) (Online), SQlite (Offline)
+
 
 Overview:
 
@@ -14,13 +15,10 @@ The Quench app is designed to assist users in moderating their intake of some of
 Features:
 
 Item
-Users can select between three items and should the percentage reduction gaol.
-
-Map
-Based on selected items, the map would show places of high risk to the user
+Users can select between three items and choose the percentage reduction gaol.
 
 Social:
-Users can share badges with friends and check for AA meetings
+Users can add, message and share badges with friends.
 
 Body Mass Index:
 Using user Weight and height (retrieved from firestore), BMI would be calculated and displayed to each user.
@@ -30,6 +28,9 @@ Based on BMI, the user’s category is returned.
 
 Progress
 The percentage reduction for items selected will be displayed alongside the number of days without usage.
+
+Map(future Implementation)
+Based on selected items, the map would show places of high risk to the user
 
 Rooms for Improvement
 Better User Interface.
@@ -46,7 +47,7 @@ Determining ways to reduce the loading time of the app mostly due to improper AP
 
 Known Mistakes Made:
 Exposing Google API key. (should know better!)
-Improper committing and pushing to GitHub. (I have limited experience using GitHub).
+Improper committing and pushing to GitHub. 
 
 
 
