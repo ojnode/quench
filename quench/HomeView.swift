@@ -9,9 +9,9 @@ import SwiftUI
 
 struct HomeView: View {
     @State var signedOut: Bool = false
-    @StateObject var firebaseInstance = FirebaseStoreUser()
     @StateObject var BMIClass = AccessUserAttributes()
-    @StateObject var units = unitCalculator()
+    @StateObject var units = localStorage()
+    let defaults = UserDefaults.standard
     
     var body: some View {
         NavigationStack {
@@ -41,8 +41,11 @@ struct HomeView: View {
                                 .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
                         
                     }
+                    .onAppear {
+                        print(defaults.bool(forKey: "isAttributesSet"))
+                    }
                   
-                    DisplayOption(isGoalSet: firebaseInstance.getAttributesSet ?? false)
+                    DisplayOption(isGoalSet: defaults.bool(forKey: "isAttributesSet"))
                         .environmentObject(BMIClass)
                         .environmentObject(units)
                     
@@ -67,7 +70,9 @@ struct HomeView: View {
                         
                         Spacer()
                         
-                        Button(action: {AuthService.shared.signOut(); signedOut = true}, label: {
+                        Button(action: {AuthService.shared.signOut(); signedOut = true;
+                            resetLocalStorage() // display error message later
+                        }, label: {
                             Text("Sign out")
                         })
                         .navigationDestination(isPresented: $signedOut) {
@@ -95,7 +100,7 @@ struct HomeView: View {
 
 struct DisplayOption: View {
     @EnvironmentObject var BMIClass: AccessUserAttributes
-    @EnvironmentObject var units: unitCalculator
+    @EnvironmentObject var units: localStorage
     
     var isGoalSet: Bool
     
