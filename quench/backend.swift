@@ -34,7 +34,11 @@ struct storeAttributes {
         }
         
         do {
-            try await docRef.updateData(["\(userKey)": "\(userValue)"])
+            if defaults.bool(forKey: "isAttributesSet") {
+                try await docRef.updateData(["\(userKey)": "\(userValue)"])
+            } else {
+                try await docRef.setData(["\(userKey)": "\(userValue)"])
+            }
         } catch {
             errorList.append(error.localizedDescription)
             return errorList
@@ -162,23 +166,31 @@ class FirebaseStoreUser: ObservableObject {
         let doc = try await docRef.getDocument().data()
         return doc
     }
+}
+
+class checkUserAttrubutes {
+    let db = Firestore.firestore().collection("users") //
+    let currentUser = Auth.auth().currentUser
+    let defaults = UserDefaults.standard
     
-   func setAttributes() async {
-            do {
-                let user = try self.getUserID()
-                let document = try await self.db.document("\(user)").getDocument()
-                DispatchQueue.main.async { // REMOVED WARNING DUE TO PUBLISHED VARIABLE CHNAGES NOT OCCURING ON MAIN THREAD
-                    self.checkAttributesSet = document.exists
-                    }
-                }
+    func saveCheckSetAttributes() async {
+        do {
+            let user = try FirebaseStoreUser().getUserID()
+            let document = try await self.db.document("\(user)").getDocument()
+            DispatchQueue.main.async { // REMOVED WARNING DUE TO PUBLISHED VARIABLE CHNAGES NOT OCCURING ON MAIN THREAD
+                self.defaults.set(document.exists, forKey: "isAttributesSet")
+            }
+            print("printing success")
+        }
         catch {
             DispatchQueue.main.async {
-                self.checkAttributesSet = false
-                }
+                self.defaults.set(false, forKey: "isAttributesSet")
             }
         }
+    }
 }
-// return error and  display later 
+
+// return error and  display later
 class AccessUserAttributes: ObservableObject {
     @Published var userAttributes: [String:Any] = [:]
     let firebase = FirebaseStoreUser()
@@ -204,7 +216,6 @@ class AccessUserAttributes: ObservableObject {
         }
         DispatchQueue.main.async {
             self.userAttributes = retrievedAttributes
-            self.attributesKeys = ["Age", "Height", "Weight", "Gender", "Reduction Goal (%)"]
         }
     }
     
@@ -253,14 +264,12 @@ class userIntakeStorage: ObservableObject {
 class localStorage: userIntakeStorage {
     var rowIDs = [Int64]()
     @Published var totalUnits: Double = 0.0
-    let user: Table
+    let user = Table("\(userID().getUserID())")
     let db: Connection
     
     var unitTotalCalculator: getTotalUnits?
     
     override init() {
-        user = Table("\(userID().getUserID())")
-        
         do {
             db = try Connection(retrieveDatabasePath().path)
         } catch {
@@ -290,7 +299,6 @@ class localStorage: userIntakeStorage {
             
             unitTotalCalculator = getTotalUnits(dataBase: db, savedDrinks: user)
             totalUnits = try await unitTotalCalculator?.getTotalUnits() ?? 0
-            
             saveTotalUnits()
             
         } catch {
@@ -322,7 +330,6 @@ class getTotalUnits: ObservableObject {
         do {
             for user in try dataBase.prepare(savedDrinks) {
                 totalUnits += user[units]
-                print(user)
             }
         } catch {
             throw RetrieveDataErrors.unitsError
@@ -348,6 +355,5 @@ func retrieveDatabasePath() -> URL {
     let fileManager = FileManager.default
     let applicationSupportDirectory = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
     let databaseURL = applicationSupportDirectory.appendingPathComponent("myDatabase.sqlite")
-    
     return databaseURL
 }
