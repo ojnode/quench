@@ -14,6 +14,7 @@ import SQLite
 struct storeAttributes {
     var userKey: String
     var userValue: String
+    let defaults = UserDefaults.standard
     
     func storeData()  async -> [String] {
         let firebase = FirebaseStoreUser()
@@ -84,12 +85,6 @@ struct userID {
 enum storageValidation: Error {
     case errorAddingDocument(String)
     case incorrectValue(String)
-}
-
-func createDatabase(data: [String: String]) async throws {
-    let db = FirebaseStoreUser().db
-    let user = try FirebaseStoreUser().getUserID()
-    try await db.document(user).setData(data)
 }
 
 func valueValidation(key: String, value: String) async throws -> Double {
@@ -356,4 +351,17 @@ func retrieveDatabasePath() -> URL {
     let applicationSupportDirectory = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
     let databaseURL = applicationSupportDirectory.appendingPathComponent("myDatabase.sqlite")
     return databaseURL
+}
+
+func resetLocalStorage() -> String? {
+    do {
+        var db = try Connection(retrieveDatabasePath().path)
+        let user = Table("\(userID().getUserID())")
+        try db.run(user.drop(ifExists: true))
+        UserDefaults.standard.removeObject(forKey: "totalUnits")
+        UserDefaults.standard.removeObject(forKey: "isAttributesSet")
+    } catch {
+        return "something went wrong"
+    }
+    return nil
 }
