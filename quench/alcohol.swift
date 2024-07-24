@@ -35,7 +35,7 @@ struct AlcoholUnits: View {
                                             get: { amountDrink[key] ?? 0.0},
                                             set: { newValue in
                                                 amountDrink[key] = newValue
-                                                units.individualWeeklyUnits(drinkType: key, userUnitsPerWeek: newValue)
+                                                units.userWeeklyIntake(drinkType: key, userUnitsPerWeek: newValue)
                                             }
                                     ), in:0...50, 
                                         step: 1
