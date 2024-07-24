@@ -168,7 +168,6 @@ class checkUserAttrubutes {
             DispatchQueue.main.async { // REMOVED WARNING DUE TO PUBLISHED VARIABLE CHNAGES NOT OCCURING ON MAIN THREAD
                 self.defaults.set(document.exists, forKey: "isAttributesSet")
             }
-            print("printing success")
         }
         catch {
             DispatchQueue.main.async {
