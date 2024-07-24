@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AlcoholUnits: View {
     @State var amountDrink: [String: Double] = [:]
-    @EnvironmentObject var units: unitCalculator
+    @EnvironmentObject var units: localStorage
     
     var body: some View {
         ZStack {
