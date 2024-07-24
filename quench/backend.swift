@@ -34,7 +34,7 @@ struct storeAttributes {
             return errorList
         }
         
-        do {
+        do {  // repeating code refactor later
             if defaults.bool(forKey: "isAttributesSet") {
                 try await docRef.updateData(["\(userKey)": "\(userValue)"])
             } else {
@@ -50,16 +50,20 @@ struct storeAttributes {
 
 struct storeSubstanceIntakeOnline {
     var substanceType: String
-    var substanceAmount: [String: Double]
+    var onlineTotal: Double
     let firebase = FirebaseStoreUser()
+    let defaults = UserDefaults.standard
     
     func storedata() async -> String? {
-        
         let userID = userID().getUserID()
         let docRef = firebase.db.document(userID)
         
-        do {
-            try await docRef.updateData(["\(substanceType)": "\(substanceAmount)"])
+        do { // repeating code refactor later
+            if defaults.bool(forKey: "isAttributesSet") {
+                try await docRef.updateData(["\(substanceType)": "\(onlineTotal)"])
+            } else {
+                try await docRef.setData(["\(substanceType)": "\(onlineTotal)"])
+            }
         } catch {
             return "something went wrong" // handle error better later
         }
@@ -96,7 +100,6 @@ func valueValidation(key: String, value: String) async throws -> Double {
         if doublevalue < 0 {
             throw storageValidation.incorrectValue("invalid \(key) input")
         }
-        
         return doublevalue
     }
     return 0.0
@@ -202,9 +205,7 @@ class AccessUserAttributes: ObservableObject {
         else {
             throw RetrieveDataErrors.attributesError
         }
-        DispatchQueue.main.async {
             self.userAttributes = retrievedAttributes
-        }
     }
     
     func calculateBodyMassIndex() {
@@ -233,7 +234,7 @@ struct unitsPerDrink {
         ]
 }
 
-class userIntakeStorage: ObservableObject {
+class userIntakeUpdate: ObservableObject {
     var userUnitsPerDrink: [String: Double] = [:]
     
     func userWeeklyIntake(drinkType: String, userUnitsPerWeek: Double) {
@@ -242,14 +243,9 @@ class userIntakeStorage: ObservableObject {
             userUnitsPerDrink[drinkType] = unitsperDrink * userUnitsPerWeek
         }
     }
-        
-    func saveUserUnitsPerDrink() async {
-        let substanceIntake = storeSubstanceIntakeOnline(substanceType: "alcohol", substanceAmount: userUnitsPerDrink)
-        await substanceIntake.storedata()
-    }
 }
 
-class localStorage: userIntakeStorage {
+class intakeStorage: userIntakeUpdate {
     var rowIDs = [Int64]()
     @Published var totalUnits: Double = 0.0
     let user = Table("\(userID().getUserID())")
@@ -265,8 +261,10 @@ class localStorage: userIntakeStorage {
         }
     }
     
+    // totally unnecessary just learning mySQL
     func saveData() async -> String? {
         do {
+            UserDefaults.standard.set(UserDefaults.standard.double(forKey: "totalUnits"), forKey: "previousTotalUnits")
             try db.run(user.drop(ifExists: true))
             let db = try Connection(retrieveDatabasePath().path)
             let id = Expression<Int>("id")
@@ -280,14 +278,17 @@ class localStorage: userIntakeStorage {
             })
             
             for (drink, drinkUnit) in userUnitsPerDrink {
-                print("during insertion \(drink)")
                 let rowID = try db.run(user.insert(drinkName <- drink, units <- drinkUnit))
                 rowIDs.append(rowID)
             }
             
             unitTotalCalculator = getTotalUnits(dataBase: db, savedDrinks: user)
             totalUnits = try await unitTotalCalculator?.getTotalUnits() ?? 0
-            saveTotalUnits()
+            
+            
+            let substanceIntake = storeSubstanceIntakeOnline(substanceType: "alcohol", onlineTotal: totalUnits)
+            await substanceIntake.storedata()
+            UserDefaults.standard.set(totalUnits, forKey: "totalUnits")
             
         } catch {
             return "something went wrong"
@@ -295,14 +296,27 @@ class localStorage: userIntakeStorage {
         userUnitsPerDrink = [:]
         return nil
     }
-    
-    // for learning purpose, yes I can just save total to mySQL
-    private func saveTotalUnits() {
-        UserDefaults.standard.set(totalUnits, forKey: "totalUnits")
-    }
 }
 
-class getTotalUnits: ObservableObject {
+func setDefaultsFirstLogin() async throws {
+    let firebase = FirebaseStoreUser()
+    guard let retrievedAttributes = try await firebase.getData()
+    else {
+        throw RetrieveDataErrors.attributesError
+    }
+    if let anyReduction = retrievedAttributes["Reduction Goal (%)"] as? String,
+       let reduction = Double(anyReduction),
+       let anyTotalUnits = retrievedAttributes["alcohol"] as? String,
+       let totalUnits = Double(anyTotalUnits) {
+        UserDefaults.standard.set(reduction, forKey: "reduction")
+        UserDefaults.standard.set(totalUnits, forKey: "totalUnits")
+    } else {
+        throw RetrieveDataErrors.attributesError
+    }
+    
+}
+
+class getTotalUnits {
     let dataBase: Connection
     let savedDrinks: Table
     let units = Expression<Double>("units")
@@ -314,7 +328,6 @@ class getTotalUnits: ObservableObject {
     }
     
     func getTotalUnits() async throws -> Double {
-        
         do {
             for user in try dataBase.prepare(savedDrinks) {
                 totalUnits += user[units]
@@ -347,12 +360,18 @@ func retrieveDatabasePath() -> URL {
 }
 
 func resetLocalStorage() -> String? {
+    let defaults = UserDefaults.standard
+    let dictionary = defaults.dictionaryRepresentation()
+    
     do {
-        var db = try Connection(retrieveDatabasePath().path)
+        let db = try Connection(retrieveDatabasePath().path)
         let user = Table("\(userID().getUserID())")
         try db.run(user.drop(ifExists: true))
-        UserDefaults.standard.removeObject(forKey: "totalUnits")
-        UserDefaults.standard.removeObject(forKey: "isAttributesSet")
+        
+        for (key, _) in dictionary {
+            defaults.removeObject(forKey: key)
+        }
+        
     } catch {
         return "something went wrong"
     }
