@@ -50,6 +50,12 @@ struct AlcoholUnits: View {
                 }
             }
         }
+        .onDisappear {
+            Task {
+                await units.saveUserUnitsPerDrink()
+                await units.saveData()
+            }
+        }
     }
 }
 
