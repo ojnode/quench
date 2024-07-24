@@ -138,16 +138,9 @@ enum userIDErrors: Error {
     case IDnotfound
 }
 
-class FirebaseStoreUser: ObservableObject {
-    let db = Firestore.firestore().collection("users") // 
+class FirebaseStoreUser {
+    let db = Firestore.firestore().collection("users") //
     let currentUser = Auth.auth().currentUser
-    @Published var checkAttributesSet: Bool?
-    
-    init() {
-        Task {
-            await self.setAttributes()
-        }
-    }
     
     func getUserID() throws -> String {
         guard let user = currentUser?.uid else {
@@ -190,7 +183,8 @@ class AccessUserAttributes: ObservableObject {
     @Published var userAttributes: [String:Any] = [:]
     let firebase = FirebaseStoreUser()
     var errorReturn: String = ""
-    var attributesKeys: [String] = []
+    var attributesKeys: [String] = ["Age", "Height", "Weight",
+                                    "Gender", "Reduction Goal (%)"]
     @Published var BMI: Double = 0.0
     
     init() {
