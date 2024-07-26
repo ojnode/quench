@@ -43,7 +43,7 @@ Challenges:
 Swift UI: The documentation for this framework is relatively sparse because it is still in its early stages of development.
 Due to its declarative programming approach, the framework imposes certain restrictions. However, this improves security and reduces breakdown.
 Determining ways to reduce the loading time of the app mostly due to improper API networking. 
-
+Calculations: researching the right formulas for accurate calculation of individual substance intake
 
 Known Mistakes Made:
 Exposing Google API key. (should know better!)
