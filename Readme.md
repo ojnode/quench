@@ -21,13 +21,16 @@ Social:
 Users can add, message and share badges with friends.
 
 Body Mass Index:
-Using user Weight and height (retrieved from firestore), BMI would be calculated and displayed to each user.
+Using user Weight and height, BMI would be calculated and displayed to each user.
 
 Health
-Based on BMI, the user’s category is returned.
+Based on BMI, the user’s category is returned graphically using th ebar chart.
 
 Progress
-The percentage reduction for items selected will be displayed alongside the number of days without usage.
+Results displaying increase or decrease in substance intake would be displayed
+Alcohol units in drink gotten using measurements from https://www.nhs.uk/live-well/alcohol-advice/calculating-alcohol-units/
+caffeine content per drink estimated using https://www.medicalnewstoday.com/articles/324986 and https://www.healthline.com/nutrition/coffee-caffeine-iron-absorption#TOC_TITLE_HDR_3
+
 
 Map(future Implementation)
 Based on selected items, the map would show places of high risk to the user
