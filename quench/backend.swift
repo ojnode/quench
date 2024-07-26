@@ -69,7 +69,49 @@ struct storeSubstanceIntakeOnline {
         }
         return nil
     }
+}
+
+class userProgress {
+    let previousUnits = UserDefaults.standard.double(forKey: "previousTotalUnits")
+    let currentTotalUnits = UserDefaults.standard.double(forKey: "totalUnits")
+    let reductionPercentage = UserDefaults.standard.double(forKey: "reduction") / 100
+
+    func calculateUnitsGoal() -> Double {
+        let userUnitsReductionGaol = reductionPercentage * previousUnits
+        return userUnitsReductionGaol
+    }
     
+    func userPrecentageAchieved() -> Double {
+        let changeInUnits = currentTotalUnits - previousUnits
+        let  precentageAchieved = (changeInUnits / previousUnits) * 100
+        return precentageAchieved
+    }
+    
+    func checkReductionIncrease() -> Bool {
+        if self.userPrecentageAchieved() < 0 {
+            return true
+        }
+        return false
+    }
+    
+    func  percentageDifference() -> Bool {
+        if abs(self.userPrecentageAchieved()) > self.reductionPercentage {
+            return true
+        }
+        return false
+    }
+    
+    func displayResuls() -> String {
+        if  self.checkReductionIncrease() && self.percentageDifference() {
+            return "Decreased by \(abs(self.userPrecentageAchieved())). Goal achieved."
+        }
+        
+        if self.checkReductionIncrease() && !self.percentageDifference() {
+            return "Decreased by \(abs(self.userPrecentageAchieved())). Goal not achieved."
+        }
+        
+        return "Increased by \(self.userPrecentageAchieved()). Goal not achieved."
+    }
 }
 
 struct userID {
