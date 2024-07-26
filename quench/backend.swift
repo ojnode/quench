@@ -292,7 +292,7 @@ class intakeStorage: userIntakeUpdate {
     @Published var totalUnits: Double = 0.0
     let user = Table("\(userID().getUserID())")
     let db: Connection
-    
+    @Published var currentTotalUnits = UserDefaults.standard.double(forKey: "totalUnits")
     var unitTotalCalculator: getTotalUnits?
     
     override init() {
