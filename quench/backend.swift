@@ -304,7 +304,7 @@ class intakeStorage: userIntakeUpdate {
     }
     
     // totally unnecessary just learning mySQL
-    func saveData() async -> String? {
+    func saveIntakeData() async -> String? {
         do {
             UserDefaults.standard.set(UserDefaults.standard.double(forKey: "totalUnits"), forKey: "previousTotalUnits")
             try db.run(user.drop(ifExists: true))
@@ -312,7 +312,6 @@ class intakeStorage: userIntakeUpdate {
             let id = Expression<Int>("id")
             let drinkName = Expression<String>("drinkName")
             let units = Expression<Double>("units")
-            
             try db.run(user.create() { t in
                 t.column(id, primaryKey: .autoincrement)
                 t.column(drinkName)
@@ -325,14 +324,15 @@ class intakeStorage: userIntakeUpdate {
             }
             
             unitTotalCalculator = getTotalUnits(dataBase: db, savedDrinks: user)
-            totalUnits = try await unitTotalCalculator?.getTotalUnits() ?? 0
+            currentTotalUnits = try await unitTotalCalculator?.getTotalUnits() ?? 0
+
+            UserDefaults.standard.set(currentTotalUnits, forKey: "totalUnits")
             
-            
-            let substanceIntake = storeSubstanceIntakeOnline(substanceType: "alcohol", onlineTotal: totalUnits)
+            let substanceIntake = storeSubstanceIntakeOnline(substanceType: "alcohol", onlineTotal: currentTotalUnits)
             await substanceIntake.storedata()
-            UserDefaults.standard.set(totalUnits, forKey: "totalUnits")
-            
+
         } catch {
+
             return "something went wrong"
         }
         userUnitsPerDrink = [:]
@@ -377,7 +377,6 @@ class getTotalUnits {
         } catch {
             throw RetrieveDataErrors.unitsError
         }
-        
         return totalUnits
     }
 }
